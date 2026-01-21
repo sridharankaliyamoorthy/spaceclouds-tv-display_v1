@@ -20,37 +20,28 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        /* Hardware Acceleration trick for TV browsers */
+        /* Hardware Acceleration */
         transform: translateZ(0);
-        will-change: opacity;
+        -webkit-transform: translateZ(0);
       }
+      /* Removed overlay for better performance */
     </style>
   </head>
   <body onclick="toggleFullScreen()">
     <div class="slideshow-container">
-      <!-- Added preload="auto" and hidden until buffered logic -->
-      <video
-        id="video-slide"
-        muted
-        playsinline
-        loop
-        preload="auto"
-        style="opacity: 0"
-      >
+      <video id="video-slide" muted playsinline loop preload="auto">
         <source src="Logo_Animation_HD_Opt1.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div class="overlay"></div>
     </div>
 
     <script>
       const video = document.getElementById("video-slide");
 
-      // Professional trick: Only show video once it's buffered to prevent stutter start
-      video.oncanplaythrough = () => {
-        video.style.opacity = "1";
-        video.play();
-      };
+      // Simplest possible play logic for slow browsers
+      window.addEventListener("load", () => {
+        video.play().catch((e) => console.log("Waiting for user interaction"));
+      });
 
       function toggleFullScreen() {
         if (!document.fullscreenElement) {
@@ -59,15 +50,6 @@
           });
         }
       }
-
-      // Manual trigger for TV browsers that block oncanplaythrough
-      window.addEventListener("load", () => {
-        if (video.readyState >= 4) {
-          // already buffered
-          video.style.opacity = "1";
-          video.play();
-        }
-      });
     </script>
   </body>
 </html>
