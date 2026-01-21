@@ -32,43 +32,30 @@
           background-image: url(&quot;screens/left/signature_cocktails.png&quot;);
         "
       ></div>
-
       <video id="video-slide" muted playsinline>
-        <source src="Logo_Animation_HD_Opt1.mp4" type="video/mp4" />
+        <source src="Original_Logo_Animation.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-
       <div class="overlay"></div>
     </div>
-
     <script>
       const imageSlide = document.getElementById("image-slide");
       const videoSlide = document.getElementById("video-slide");
-
-      const IMAGE_DURATION = 30000; // 30 seconds
-
+      const IMAGE_DURATION = 30000;
       function switchToVideo() {
-        // Transition to Video
         imageSlide.classList.remove("active");
         videoSlide.classList.add("active");
         videoSlide.currentTime = 0;
         videoSlide.play();
       }
-
-      // Automatically switch back to image when video finishes
       videoSlide.onended = () => {
         switchToImage();
       };
-
       function switchToImage() {
-        // Transition back to Image
         videoSlide.classList.remove("active");
         imageSlide.classList.add("active");
-
-        // Wait for image duration then switch back to video
         setTimeout(switchToVideo, IMAGE_DURATION);
       }
-
       function toggleFullScreen() {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch((err) => {
@@ -76,8 +63,6 @@
           });
         }
       }
-
-      // Start: Image is initially active, wait for its duration then play video
       setTimeout(switchToVideo, IMAGE_DURATION);
     </script>
   </body>
