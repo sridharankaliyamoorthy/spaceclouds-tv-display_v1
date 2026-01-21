@@ -5,19 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Space Clouds - Left Screen</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .slide,
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
+      .slide.active,
+      video.active {
+        opacity: 1;
+      }
+    </style>
   </head>
-  <body>
+  <body onclick="toggleFullScreen()">
     <div class="slideshow-container">
       <div
+        id="image-slide"
         class="slide active"
         style="
           background-image: url(&quot;screens/left/signature_cocktails.png&quot;);
         "
       ></div>
+
+      <video id="video-slide" muted playsinline>
+        <source src="Logo_Animation_HD_test.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       <div class="overlay"></div>
     </div>
+
     <script>
-      // Slideshow logic can be expanded here
+      const imageSlide = document.getElementById("image-slide");
+      const videoSlide = document.getElementById("video-slide");
+
+      const IMAGE_DURATION = 30000; // 30 seconds
+
+      function switchToVideo() {
+        // Transition to Video
+        imageSlide.classList.remove("active");
+        videoSlide.classList.add("active");
+        videoSlide.currentTime = 0;
+        videoSlide.play();
+      }
+
+      // Automatically switch back to image when video finishes
+      videoSlide.onended = () => {
+        switchToImage();
+      };
+
+      function switchToImage() {
+        // Transition back to Image
+        videoSlide.classList.remove("active");
+        imageSlide.classList.add("active");
+
+        // Wait for image duration then switch back to video
+        setTimeout(switchToVideo, IMAGE_DURATION);
+      }
+
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.log(`Error: ${err.message}`);
+          });
+        }
+      }
+
+      // Start: Image is initially active, wait for its duration then play video
+      setTimeout(switchToVideo, IMAGE_DURATION);
     </script>
   </body>
 </html>
