@@ -6,7 +6,6 @@
     <title>Space Clouds - Right Screen</title>
     <link rel="stylesheet" href="style.css" />
     <style>
-      /* Subtle Transitions */
       .slide,
       video {
         position: absolute;
@@ -16,7 +15,7 @@
         height: 100%;
         object-fit: cover;
         opacity: 0;
-        transition: opacity 2.5s ease-in-out; /* Slowed down for subtlety */
+        transition: opacity 2.5s ease-in-out;
       }
       .slide.active,
       video.active {
@@ -34,8 +33,8 @@
         "
       ></div>
 
-      <!-- Removed 'loop' to prevent auto-repeating -->
-      <video id="video-slide" muted playsinline>
+      <!-- Video with loop enabled as requested -->
+      <video id="video-slide" muted playsinline loop>
         <source src="Logo_Animation_HD_test.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -47,24 +46,30 @@
       const imageSlide = document.getElementById("image-slide");
       const videoSlide = document.getElementById("video-slide");
 
-      // Interval set to 30 seconds
-      const CYCLE_DURATION = 30000;
+      const IMAGE_DURATION = 30000; // 30 seconds
+      const VIDEO_DURATION = 10000; // 10 seconds
 
-      function startSlideshow() {
-        setInterval(() => {
-          if (imageSlide.classList.contains("active")) {
-            // Transition to Video
-            imageSlide.classList.remove("active");
-            videoSlide.classList.add("active");
-            videoSlide.currentTime = 0; // Ensure it starts from beginning
-            videoSlide.play();
-          } else {
-            // Transition back to Image
-            videoSlide.classList.remove("active");
-            setTimeout(() => videoSlide.pause(), 2500); // Wait for fade to finish before pausing
-            imageSlide.classList.add("active");
-          }
-        }, CYCLE_DURATION);
+      function switchToVideo() {
+        // Transition to Video
+        imageSlide.classList.remove("active");
+        videoSlide.classList.add("active");
+        videoSlide.currentTime = 0;
+        videoSlide.play();
+
+        // Wait for video duration then switch back
+        setTimeout(switchToImage, VIDEO_DURATION);
+      }
+
+      function switchToImage() {
+        // Transition back to Image
+        videoSlide.classList.remove("active");
+        imageSlide.classList.add("active");
+
+        // Pause video after it fades out
+        setTimeout(() => videoSlide.pause(), 2500);
+
+        // Wait for image duration then switch back
+        setTimeout(switchToVideo, IMAGE_DURATION);
       }
 
       function toggleFullScreen() {
@@ -75,7 +80,8 @@
         }
       }
 
-      startSlideshow();
+      // Initial start: Image is active, so wait and then switch to video
+      setTimeout(switchToVideo, IMAGE_DURATION);
     </script>
   </body>
 </html>
