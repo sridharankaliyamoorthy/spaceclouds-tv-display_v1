@@ -6,6 +6,8 @@
     <title>Space Clouds - Right Screen</title>
     <link rel="stylesheet" href="style.css" />
     <style>
+      /* Subtle Transitions */
+      .slide,
       video {
         position: absolute;
         top: 0;
@@ -14,8 +16,9 @@
         height: 100%;
         object-fit: cover;
         opacity: 0;
-        transition: opacity 1s ease-in-out;
+        transition: opacity 2.5s ease-in-out; /* Slowed down for subtlety */
       }
+      .slide.active,
       video.active {
         opacity: 1;
       }
@@ -31,7 +34,8 @@
         "
       ></div>
 
-      <video id="video-slide" muted playsinline loop>
+      <!-- Removed 'loop' to prevent auto-repeating -->
+      <video id="video-slide" muted playsinline>
         <source src="Logo_Animation_HD_test.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -43,23 +47,24 @@
       const imageSlide = document.getElementById("image-slide");
       const videoSlide = document.getElementById("video-slide");
 
-      // Interval settings (milliseconds)
-      const SHOW_DURATION = 10000; // 10 seconds for each
+      // Interval set to 30 seconds
+      const CYCLE_DURATION = 30000;
 
       function startSlideshow() {
         setInterval(() => {
           if (imageSlide.classList.contains("active")) {
-            // Switch to Video
+            // Transition to Video
             imageSlide.classList.remove("active");
             videoSlide.classList.add("active");
+            videoSlide.currentTime = 0; // Ensure it starts from beginning
             videoSlide.play();
           } else {
-            // Switch to Image
+            // Transition back to Image
             videoSlide.classList.remove("active");
-            videoSlide.pause();
+            setTimeout(() => videoSlide.pause(), 2500); // Wait for fade to finish before pausing
             imageSlide.classList.add("active");
           }
-        }, SHOW_DURATION);
+        }, CYCLE_DURATION);
       }
 
       function toggleFullScreen() {
@@ -70,7 +75,6 @@
         }
       }
 
-      // Start the cycle
       startSlideshow();
     </script>
   </body>
