@@ -5,16 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Space Clouds - Right Screen</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
+      video.active {
+        opacity: 1;
+      }
+    </style>
   </head>
-  <body>
+  <body onclick="toggleFullScreen()">
     <div class="slideshow-container">
       <div
+        id="image-slide"
         class="slide active"
         style="
           background-image: url(&quot;screens/right/premium_spirits.png&quot;);
         "
       ></div>
+
+      <video id="video-slide" muted playsinline loop>
+        <source src="Logo_Animation_HD_test.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       <div class="overlay"></div>
     </div>
+
+    <script>
+      const imageSlide = document.getElementById("image-slide");
+      const videoSlide = document.getElementById("video-slide");
+
+      // Interval settings (milliseconds)
+      const SHOW_DURATION = 10000; // 10 seconds for each
+
+      function startSlideshow() {
+        setInterval(() => {
+          if (imageSlide.classList.contains("active")) {
+            // Switch to Video
+            imageSlide.classList.remove("active");
+            videoSlide.classList.add("active");
+            videoSlide.play();
+          } else {
+            // Switch to Image
+            videoSlide.classList.remove("active");
+            videoSlide.pause();
+            imageSlide.classList.add("active");
+          }
+        }, SHOW_DURATION);
+      }
+
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.log(`Error: ${err.message}`);
+          });
+        }
+      }
+
+      // Start the cycle
+      startSlideshow();
+    </script>
   </body>
 </html>
