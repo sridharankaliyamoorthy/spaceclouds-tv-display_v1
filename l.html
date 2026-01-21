@@ -33,7 +33,7 @@
         "
       ></div>
       <video id="video-slide" muted playsinline>
-        <source src="Original_Logo_Animation.mp4" type="video/mp4" />
+        <source src="Logo_Animation_HD_test.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div class="overlay"></div>
@@ -41,21 +41,25 @@
     <script>
       const imageSlide = document.getElementById("image-slide");
       const videoSlide = document.getElementById("video-slide");
-      const IMAGE_DURATION = 30000;
+      const IMAGE_DURATION = 30000; // 30 seconds
+
       function switchToVideo() {
         imageSlide.classList.remove("active");
         videoSlide.classList.add("active");
         videoSlide.currentTime = 0;
         videoSlide.play();
       }
+
       videoSlide.onended = () => {
         switchToImage();
       };
+
       function switchToImage() {
         videoSlide.classList.remove("active");
         imageSlide.classList.add("active");
         setTimeout(switchToVideo, IMAGE_DURATION);
       }
+
       function toggleFullScreen() {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch((err) => {
@@ -63,6 +67,7 @@
           });
         }
       }
+
       setTimeout(switchToVideo, IMAGE_DURATION);
     </script>
   </body>
