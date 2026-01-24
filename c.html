@@ -27,33 +27,31 @@
   </head>
   <body onclick="toggleFullScreen()">
     <div class="slideshow-container">
-      <video id="video-slide" muted playsinline autoplay preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
-        <source src="screens/center/logo_animation.mp4" type="video/mp4" />
+      <video id="video-slide" muted playsinline loop autoplay preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
+        <source src="screens/center/Logo_animation_002.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
 
     <script>
       const video = document.getElementById("video-slide");
-      const LOOP_DURATION = 7; // Loop first 7 seconds
 
       window.addEventListener("load", () => {
         video.play().catch((e) => console.log("Waiting for user interaction"));
       });
 
-      // Custom loop logic - restart at 7 seconds with immediate replay
-      video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= LOOP_DURATION) {
-          video.currentTime = 0;
-          video.play().catch((e) => console.log("Loop replay failed:", e));
-        }
-      });
-
-      // Backup: if video ends naturally, restart
+      // Manual loop handler - ensure video restarts immediately
       video.onended = () => {
         video.currentTime = 0;
         video.play().catch((e) => console.log("Loop replay failed:", e));
       };
+
+      // Also use timeupdate as backup
+      video.addEventListener('timeupdate', () => {
+        if (video.duration > 0 && video.currentTime >= video.duration - 0.1) {
+          video.currentTime = 0;
+        }
+      });
 
       // Error recovery handlers
       video.onerror = () => {
