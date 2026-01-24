@@ -41,13 +41,19 @@
         video.play().catch((e) => console.log("Waiting for user interaction"));
       });
 
-      // Custom loop logic - restart at 7 seconds
+      // Custom loop logic - restart at 7 seconds with immediate replay
       video.addEventListener('timeupdate', () => {
         if (video.currentTime >= LOOP_DURATION) {
           video.currentTime = 0;
-          video.play();
+          video.play().catch((e) => console.log("Loop replay failed:", e));
         }
       });
+
+      // Backup: if video ends naturally, restart
+      video.onended = () => {
+        video.currentTime = 0;
+        video.play().catch((e) => console.log("Loop replay failed:", e));
+      };
 
       // Error recovery handlers
       video.onerror = () => {

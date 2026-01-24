@@ -40,6 +40,19 @@
         video.play().catch((e) => console.log("Waiting for user interaction"));
       });
 
+      // Manual loop handler - ensure video restarts immediately
+      video.onended = () => {
+        video.currentTime = 0;
+        video.play().catch((e) => console.log("Loop replay failed:", e));
+      };
+
+      // Also use timeupdate as backup
+      video.addEventListener('timeupdate', () => {
+        if (video.duration > 0 && video.currentTime >= video.duration - 0.1) {
+          video.currentTime = 0;
+        }
+      });
+
       // Error recovery handlers
       video.onerror = () => {
         console.log("Video error, reloading...");
