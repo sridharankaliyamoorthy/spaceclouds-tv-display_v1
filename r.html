@@ -36,58 +36,24 @@
     <script>
       const video = document.getElementById("video-slide");
 
+      // Start playback on load
       window.addEventListener("load", () => {
         video.play().catch((e) => console.log("Waiting for user interaction"));
       });
 
-      // Manual loop handler - ensure video restarts immediately
-      video.onended = () => {
-        video.currentTime = 0;
-        video.play().catch((e) => console.log("Loop replay failed:", e));
-      };
-
-      // Also use timeupdate as backup
-      video.addEventListener('timeupdate', () => {
-        if (video.duration > 0 && video.currentTime >= video.duration - 0.1) {
-          video.currentTime = 0;
-        }
-      });
-
-      // Error recovery handlers
-      video.onerror = () => {
-        console.log("Video error, reloading...");
-        video.load();
-        setTimeout(() => video.play(), 1000);
-      };
-
-      video.onstalled = () => {
-        console.log("Video stalled, attempting recovery...");
-        video.load();
-        video.play();
-      };
-
-      // Watchdog timer - if video freezes for 10s, restart
-      let lastTime = 0;
-      setInterval(() => {
-        if (!video.paused) {
-          if (video.currentTime === lastTime) {
-            console.log("Video frozen, restarting...");
-            video.currentTime = 0;
-            video.play();
-          }
-          lastTime = video.currentTime;
-        }
-      }, 10000);
-
-      // Force play on visibility (TV sleep recovery)
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
+      // Ensure video plays on any user interaction
+      document.body.addEventListener('click', () => {
+        if (video.paused) {
           video.play();
         }
       });
 
-      // Periodic page refresh to clear memory (every 6 hours)
-      setTimeout(() => location.reload(), 6 * 60 * 60 * 1000);
+      // Resume on visibility change (wake from sleep)
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && video.paused) {
+          video.play();
+        }
+      });
 
       function toggleFullScreen() {
         if (!document.fullscreenElement) {
