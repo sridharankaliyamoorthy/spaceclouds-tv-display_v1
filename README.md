@@ -6,42 +6,112 @@ This project provides a professional, 3-screen digital signage solution for Spac
 
 - **Hosting**: GitHub Pages (provides live, auto-updating URLs).
 - **Format**: Semantic HTML5/CSS3 with Vanilla JS for timing.
-- **Resolution**: Optimized for 1920x1080 (Full HD).
+- **Resolution**: Optimized for 1920x1080 (Full HD) and 2048x1152.
 
-## 📺 Screen Configurations
+## 📺 Screen Configurations (Updated Jan 2026)
 
 ### 1. Left Screen (`l.html`)
 
-- **Content**: Signature Cocktails menu + Logo Animation.
-- **Logic**: Static menu for **30 seconds**, followed by a **1s cross-fade** to the logo animation. The video plays its full duration before returning to the menu.
+- **Content**: Signature Cocktails Menu Video Animation
+- **Video**: `screens/right/v002/Signtaure_contail_menu_2.mp4`
+- **Logic**: Plays on an **infinite loop** with seamless playback
 - **Short URL**: `tinyurl.com/sclv1`
 
 ### 2. Center Screen (`c.html`)
 
-- **Content**: High-definition Logo Animation (`Opt1`).
-- **Logic**: Plays on an **infinite loop** with `object-fit: cover` to ensure a premium, borderless look.
+- **Content**: Logo Animation
+- **Video**: `screens/center/Logo_animation_002_compressed.mp4`
+- **Logic**: Plays on an **infinite loop** with `object-fit: cover`
 - **Short URL**: `tinyurl.com/scev1`
 
 ### 3. Right Screen (`r.html`)
 
-- **Content**: Premium Spirits menu + Logo Animation.
-- **Logic**: Static menu for **30 seconds**, followed by a **1s cross-fade** to the logo animation. The video plays its full duration before returning to the menu.
+- **Content**: Signature Cocktails Menu Video Animation
+- **Video**: `screens/left/V002/Signtaure_contail_menu_1.mp4`
+- **Logic**: Plays on an **infinite loop** with seamless playback
 - **Short URL**: `tinyurl.com/scrgtv1`
 
-## 🚀 How to Update Content (Automation)
+## 🎬 Video Requirements for LG TV Browser
 
-The system is **fully automated** for daily updates. You do NOT need to touch PosterBooking or the TV browser settings to change an image or video:
+**IMPORTANT:** LG TV browsers have specific video codec requirements for reliable playback.
 
-1. Replace the file in the local folder (e.g., replace `screens/left/signature_cocktails.png` with a new version).
+### ✅ Recommended Video Specs (Works on LG TV)
+
+| Property | Recommended Value |
+|----------|------------------|
+| **Codec** | HEVC (H.265) or H.264 |
+| **Resolution** | Up to 2048x1152 (for HEVC) or 1920x1080 (for H.264) |
+| **Container** | MP4 |
+| **Audio** | AAC |
+
+### ⚠️ Known Issues
+
+1. **H.264 at high resolutions (>1920x1080)** may not play in LG TV browser
+2. **HEVC (H.265) works better** for higher resolution videos on LG TVs
+3. **File size** should ideally be under 15MB for smooth streaming
+
+### 🔧 FFmpeg Compression (If Needed)
+
+**For HEVC (recommended for LG TV):**
+```bash
+ffmpeg -i input.mp4 -c:v libx265 -crf 28 -preset medium -c:a aac -b:a 128k -movflags +faststart output.mp4
+```
+
+**For H.264 (resize to 1080p):**
+```bash
+ffmpeg -i input.mp4 -vf "scale=1920:1080" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k -movflags +faststart output.mp4
+```
+
+**DO NOT** compress HEVC videos to H.264 without resizing - this breaks LG TV browser compatibility!
+
+## 🚀 How to Update Content
+
+The system is **fully automated** for daily updates:
+
+1. Replace the video file in the appropriate folder
 2. Push to GitHub:
    ```bash
    git add .
-   git commit -m "Update cocktail menu"
+   git commit -m "Update video content"
    git push origin main
    ```
-3. The TV will update automatically on its next refresh cycle.
+3. Wait 1-2 minutes for GitHub Pages to rebuild
+4. Refresh the TV browser (or it will auto-refresh every 6 hours)
 
 ## 📺 LG TV Deployment Guide
 
-- **Browser Method**: Open the URL (e.g., `tinyurl.com/scev1`) in the LG TV Web Browser. Click anywhere on the screen once to trigger **True Fullscreen Mode**.
-- **PosterBooking Method**: Add the URLs as "Websites" in your PosterBooking dashboard and assign them to your screens.
+### Browser Method
+1. Open the URL in the LG TV Web Browser
+2. Click anywhere on the screen once to trigger **Fullscreen Mode**
+3. The video will loop automatically
+
+### Troubleshooting
+- **Video not playing?** Check the codec (must be HEVC for high-res)
+- **Black screen?** Clear browser cache: Settings → Clear Cache
+- **Buffering?** Check internet connection (minimum 5 Mbps recommended)
+
+### Cache Busting
+If the TV shows old content, add `?v=2` to the URL:
+```
+https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/l.html?v=2
+```
+
+## 📁 Project Structure
+
+```
+├── l.html                    # Left screen
+├── c.html                    # Center screen
+├── r.html                    # Right screen
+├── style.css                 # Shared styles
+├── screens/
+│   ├── left/V002/           # Left screen videos
+│   ├── center/              # Center screen videos
+│   └── right/v002/          # Right screen videos
+└── mockups/                  # Feature mockups for future
+```
+
+## 🔗 Live URLs
+
+- **Left**: https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/l.html
+- **Center**: https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/c.html
+- **Right**: https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/r.html
