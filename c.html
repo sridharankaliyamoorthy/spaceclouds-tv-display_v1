@@ -122,25 +122,6 @@
       });
     }
 
-    // Attach listeners
-    [video1, video2].forEach(player => {
-      // Use 'ended' to trigger swap
-      player.addEventListener('ended', () => {
-        if (player === activePlayer && !isTransitioning) {
-          swapVideos();
-        }
-      });
-
-      // Error recovery
-      player.addEventListener('error', (e) => {
-        console.error("Video Error:", e);
-        if (player === activePlayer) {
-          // If active player errors, try to skip
-          swapVideos();
-        }
-      });
-    });
-
     // Visibility API Implementation
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
@@ -159,16 +140,38 @@
       if (isTransitioning) {
         // We rely on the swapVideos timeout (1s) to clear it. 
         // If it's still true after 3s, something broke.
-        // But we don't track start time here. 
-        // Let's just ensure activePlayer is playing if not transitioning.
+        // Reset everything.
+        console.log("Watchdog: Transition timed out. Forcing reset...");
+        activePlayer.classList.remove('active');
+        activePlayer.pause();
+
+        // Ensure next player is active
+        nextPlayer.classList.add('active');
+        playVideo(nextPlayer);
+
+        // Swap ref
+        activePlayer = nextPlayer;
+        // Find who the OTHER one is
+        nextPlayer = (activePlayer === video1) ? video2 : video1;
+
+        // Set next player source correctly based on current index
+        const nextIndex = (currentVideoIndex + 1) % videoSources.length;
+        currentVideoIndex = nextIndex;
+        const futureIndex = (nextIndex + 1) % videoSources.length;
+
+        nextPlayer.classList.remove('active');
+        nextPlayer.src = videoSources[futureIndex];
+        nextPlayer.load();
+
+        isTransitioning = false;
       }
 
-      // 2. Check if stuck here
+      // 2. Check if stuck paused (only if visible)
       if (!isTransitioning && activePlayer.paused && !document.hidden) {
         console.log("Watchdog: Video shouldn't be paused. Kicking...");
         playVideo(activePlayer);
       }
-    }, 2000);
+    }, 4000); // 4s check (longer than 1s transition)
 
     // Click handler for fullscreen and ensuring playback
     function handleClick() {
@@ -179,11 +182,39 @@
       }
 
       // Only attempt to play if we are NOT transitioning and it's paused.
-      // If we are transitioning, let the logic handle it to avoid "stops on click" glitches
       if (!isTransitioning && activePlayer.paused) {
         playVideo(activePlayer);
       }
     }
+
+    // Attach listeners
+    [video1, video2].forEach(player => {
+      // Use 'timeupdate' for pre-emptive cross-fade
+      player.addEventListener('timeupdate', () => {
+        if (player === activePlayer && !isTransitioning) {
+          const timeRemaining = player.duration - player.currentTime;
+          // Start transition 1s before end
+          if (timeRemaining < 1.0 && timeRemaining > 0) {
+            swapVideos();
+          }
+        }
+      });
+
+      // Fallback: Ends
+      player.addEventListener('ended', () => {
+        if (player === activePlayer && !isTransitioning) {
+          swapVideos();
+        }
+      });
+
+      // Error recovery
+      player.addEventListener('error', (e) => {
+        console.error("Video Error:", e);
+        if (player === activePlayer) {
+          swapVideos();
+        }
+      });
+    });
 
     window.addEventListener("load", init);
 
