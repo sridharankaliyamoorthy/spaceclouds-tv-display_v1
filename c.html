@@ -85,31 +85,39 @@
 
       // Play next video immediately
       nextPlayer.play().then(() => {
-        // Fade in next player
-        nextPlayer.classList.add('active');
+        // Wait for connection to actually have a frame ready
+        const onFrameReady = () => {
+          if (nextPlayer.currentTime > 0) {
+            nextPlayer.removeEventListener('timeupdate', onFrameReady);
 
-        // Wait for CSS transition (1s)
-        setTimeout(() => {
-          // Cleanup old active player
-          activePlayer.classList.remove('active');
-          activePlayer.pause();
-          activePlayer.currentTime = 0;
+            // Fade in next player NOW that we know it has data
+            nextPlayer.classList.add('active');
 
-          // Prepare for FUTURE
-          activePlayer.src = videoSources[futureIndex];
-          activePlayer.load();
+            // Wait for CSS transition (1s)
+            setTimeout(() => {
+              // Cleanup old active player
+              activePlayer.classList.remove('active');
+              activePlayer.pause();
+              activePlayer.currentTime = 0;
 
-          // Swap references
-          [activePlayer, nextPlayer] = [nextPlayer, activePlayer];
-          currentVideoIndex = nextIndex;
+              // Prepare for FUTURE
+              activePlayer.src = videoSources[futureIndex];
+              activePlayer.load();
 
-          isTransitioning = false;
-        }, 1000);
+              // Swap references
+              [activePlayer, nextPlayer] = [nextPlayer, activePlayer];
+              currentVideoIndex = nextIndex;
+
+              isTransitioning = false;
+            }, 1000);
+          }
+        };
+
+        nextPlayer.addEventListener('timeupdate', onFrameReady);
+
       }).catch(e => {
         console.error("Next video failed to play:", e);
         isTransitioning = false;
-        // Retry or just let it hang/wait for click?
-        // Force a retry after a moment?
         setTimeout(swapVideos, 2000);
       });
     }
@@ -155,7 +163,7 @@
         // Let's just ensure activePlayer is playing if not transitioning.
       }
 
-      // 2. Check if stuck
+      // 2. Check if stuck here
       if (!isTransitioning && activePlayer.paused && !document.hidden) {
         console.log("Watchdog: Video shouldn't be paused. Kicking...");
         playVideo(activePlayer);
