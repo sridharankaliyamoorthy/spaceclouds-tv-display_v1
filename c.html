@@ -28,7 +28,7 @@
   </style>
 </head>
 
-<body onclick="toggleFullScreen()">
+<body onclick="handleClick()">
   <div class="slideshow-container">
     <video id="video1" class="slide active" muted playsinline autoplay preload="auto" webkit-playsinline="true"
       x-webkit-airplay="allow">
@@ -51,95 +51,113 @@
     let currentVideoIndex = 0;
     let activePlayer = video1;
     let nextPlayer = video2;
+    let isTransitioning = false;
 
     function init() {
       // Setup initial state
       video1.src = videoSources[0];
       video2.src = videoSources[1]; // Preload next
 
-      // Load both
       video1.load();
       video2.load();
 
       // Attempt to play first one
-      const playPromise = video1.play();
+      playVideo(video1);
+    }
+
+    function playVideo(player) {
+      const playPromise = player.play();
       if (playPromise !== undefined) {
         playPromise.catch(error => {
-          console.log("Autoplay prevented:", error);
+          console.log("Play failed (interrupted or hidden):", error);
+          // If play fails, we might need manual interaction or it will retry on click
         });
       }
     }
 
     function swapVideos() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+
       // Calculate next index
       const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-
-      // Update next player's source if needed (buffer ahead)
-      // In this 2-video loop, they are already set correctly if we swap carefully, 
-      // but for generic N videos:
       const futureIndex = (nextIndex + 1) % videoSources.length;
 
-      // Start playing the next video (it's behind the active one, or opacity 0)
+      // Play next video immediately
       nextPlayer.play().then(() => {
         // Fade in next player
         nextPlayer.classList.add('active');
-        // Fade out active player (after transition finishes or concurrently)
-        // Since active is top, fading OUT active reveals next? 
-        // Or fading IN next (if z-index matches) covers active?
-        // With default CSS, everything absolute. Last in DOM is on top. 
-        // Let's rely on class toggling. The 'active' class has opacity 1. 
-        // We want the ONE coming in to become opacity 1.
-        // If we just toggle 'active' on nextPlayer, it fades in.
 
-        // Wait for transition to complete before resetting the old one
+        // Wait for CSS transition (1s)
         setTimeout(() => {
+          // Cleanup old active player
           activePlayer.classList.remove('active');
           activePlayer.pause();
           activePlayer.currentTime = 0;
 
-          // Prepare old active player for its NEXT turn
+          // Prepare for FUTURE
           activePlayer.src = videoSources[futureIndex];
           activePlayer.load();
 
           // Swap references
           [activePlayer, nextPlayer] = [nextPlayer, activePlayer];
           currentVideoIndex = nextIndex;
-        }, 1000); // 1s matches CSS transition duration
 
-      }).catch(e => console.error("Next video play failed", e));
+          isTransitioning = false;
+        }, 1000);
+      }).catch(e => {
+        console.error("Next video failed to play:", e);
+        isTransitioning = false;
+        // Retry or just let it hang/wait for click?
+        // Force a retry after a moment?
+        setTimeout(swapVideos, 2000);
+      });
     }
 
-    // Attach listeners to both players
+    // Attach listeners
     [video1, video2].forEach(player => {
-      // Trigger swap slightly before end for smoother feel? 
-      // Or just 'ended' is fine with a crossfade. 
-      // 'ended' event means the current video stopped. 
-      // If we wait for 'ended', there will be a freeze frame while next fades in.
-      // Better to trigger ON 'ended' but have the next one start immediately.
-      // The freeze frame of 'ended' video will be covered by the fading-in next video.
+      // Use 'ended' to trigger swap
       player.addEventListener('ended', () => {
-        // Only swap if this player is currently the active one
-        if (player === activePlayer) {
+        if (player === activePlayer && !isTransitioning) {
           swapVideos();
         }
       });
 
-      // Ensure visibility recovery
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && player.paused && player.classList.contains('active')) {
-          player.play();
+      // Error recovery
+      player.addEventListener('error', (e) => {
+        console.error("Video Error:", e);
+        if (player === activePlayer) {
+          // If active player errors, try to skip
+          swapVideos();
         }
       });
     });
 
-    // Global click to start/fullscreen
-    function toggleFullScreen() {
+    // Visibility API Implementation
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        // Optional: pause? No, let it run/buffer.
+      } else {
+        // Wake up if paused strangely
+        if (activePlayer.paused && !isTransitioning) {
+          playVideo(activePlayer);
+        }
+      }
+    });
+
+    // Click handler for fullscreen and ensuring playback
+    function handleClick() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
           console.log("Fullscreen error:", err);
         });
       }
-      if (activePlayer.paused) activePlayer.play();
+
+      // Only attempt to play if we are NOT transitioning and it's paused.
+      // If we are transitioning, let the logic handle it to avoid "stops on click" glitches
+      if (!isTransitioning && activePlayer.paused) {
+        playVideo(activePlayer);
+      }
     }
 
     window.addEventListener("load", init);
