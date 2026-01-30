@@ -1,67 +1,87 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Space Clouds - Center Screen</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-      body,
-      html {
-        background: #000;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Clouds - Center Screen</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body,
+    html {
+      background: #000;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+    }
+  </style>
+</head>
+
+<body onclick="toggleFullScreen()">
+  <div class="slideshow-container">
+    <video id="video-slide" muted playsinline autoplay preload="auto" webkit-playsinline="true"
+      x-webkit-airplay="allow">
+      <source src="screens/center/Logo_animation_h264.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <script>
+    const video = document.getElementById("video-slide");
+    const videoSources = [
+      "screens/center/Logo_animation_h264.mp4",
+      "screens/center/Mystery_shot_h264.mp4"
+    ];
+    let currentVideoIndex = 0;
+
+    // Function to play the next video
+    function playNextVideo() {
+      currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+      video.src = videoSources[currentVideoIndex];
+      video.play().catch((e) => console.log("Playback error:", e));
+    }
+
+    // Start playback on load
+    window.addEventListener("load", () => {
+      video.play().catch((e) => console.log("Waiting for user interaction"));
+    });
+
+    // Listen for the 'ended' event to trigger the next video
+    video.addEventListener("ended", playNextVideo);
+
+    // Ensure video plays on any user interaction
+    document.body.addEventListener('click', () => {
+      if (video.paused) {
+        video.play();
       }
-      video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
+    });
+
+    // Resume on visibility change (wake from sleep)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && video.paused) {
+        video.play();
       }
-    </style>
-  </head>
-  <body onclick="toggleFullScreen()">
-    <div class="slideshow-container">
-      <video id="video-slide" muted playsinline loop autoplay preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
-        <source src="screens/center/Logo_animation_002_compressed.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
+    });
 
-    <script>
-      const video = document.getElementById("video-slide");
-
-      // Start playback on load
-      window.addEventListener("load", () => {
-        video.play().catch((e) => console.log("Waiting for user interaction"));
-      });
-
-      // Ensure video plays on any user interaction
-      document.body.addEventListener('click', () => {
-        if (video.paused) {
-          video.play();
-        }
-      });
-
-      // Resume on visibility change (wake from sleep)
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && video.paused) {
-          video.play();
-        }
-      });
-
-      function toggleFullScreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch((err) => {
-            console.log(`Error: ${err.message}`);
-          });
-        }
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.log(`Error: ${err.message}`);
+        });
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>

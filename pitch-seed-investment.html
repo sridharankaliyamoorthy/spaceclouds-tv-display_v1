@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venue Signage — Seed Investment Pitch</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(160deg, #0a0e14 0%, #131920 40%, #0d1117 100%);
+      color: #e6edf3;
+      margin: 0;
+      padding: 48px 28px 64px;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .container { max-width: 920px; margin: 0 auto; }
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .tagline {
+      font-size: 1.05rem;
+      color: #7ee787;
+      margin-bottom: 2.5rem;
+      font-weight: 500;
+    }
+    .meta { font-size: 0.9rem; color: #6e7681; margin-bottom: 2rem; }
+    .section {
+      margin-bottom: 2.25rem;
+    }
+    .section h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #58a6ff;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid #30363d;
+    }
+    .section p { margin: 0 0 0.85rem; color: #b1bac4; font-size: 0.98rem; }
+    .section p:last-child { margin-bottom: 0; }
+    .section ul { margin: 0.5rem 0 1rem 1.25rem; color: #b1bac4; font-size: 0.98rem; }
+    .section li { margin-bottom: 0.4rem; }
+    .highlight { color: #fff; font-weight: 500; }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin: 1rem 0;
+    }
+    .stat {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-num { font-size: 1.5rem; font-weight: 700; color: #7ee787; }
+    .stat-label { font-size: 0.8rem; color: #8b949e; margin-top: 4px; }
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      background: #161b22;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #30363d;
+    }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #21262d; }
+    th { background: #21262d; color: #58a6ff; font-weight: 600; }
+    td { color: #b1bac4; }
+    tr:last-child td { border-bottom: none; }
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .pill-green { background: rgba(46, 160, 67, 0.2); color: #7ee787; }
+    .pill-blue { background: rgba(56, 139, 253, 0.2); color: #79c0ff; }
+    .pill-gold { background: rgba(210, 153, 34, 0.2); color: #e3b341; }
+    .savings { color: #7ee787; font-weight: 600; }
+    .cta-box {
+      background: linear-gradient(135deg, #1a2332 0%, #161b22 100%);
+      border: 1px solid #388bfd;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 2rem 0;
+    }
+    .cta-box h3 { margin: 0 0 0.5rem; color: #79c0ff; font-size: 1rem; }
+    .cta-box p { margin: 0; font-size: 0.95rem; }
+    .cta-box a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .cta-box a:hover { text-decoration: underline; }
+    .footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6e7681;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #21262d;
+    }
+    .created-by { color: #8b949e; margin-top: 0.5rem; }
+
+    @media print {
+      body { padding: 32px 24px; }
+      .section { break-inside: avoid; }
+      html, body {
+        background: #0d1117 !important;
+        color: #e6edf3 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .tagline { color: #7ee787 !important; }
+      .stat, table, .cta-box, th, .section h2, .pill-gold, .savings {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .stat { background: #161b22 !important; border-color: #30363d !important; }
+      .cta-box { background: #1a2332 !important; border-color: #388bfd !important; }
+      table, th { background: #21262d !important; }
+      .cta-box a { color: #58a6ff !important; }
+      .savings { color: #7ee787 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Venue Signage</h1>
+    <p class="tagline">Affordable, web-based digital signage for bars, restaurants &amp; multi-venue operators</p>
+    <p class="meta">Seed investment pitch · Expand to multiple venues · Jan 2026</p>
+
+    <div class="section">
+      <h2>Vision</h2>
+      <p>We build <span class="highlight">simple, TV-ready digital signage</span> that runs in a browser—no extra hardware, no app stores. One proven system at a live venue (Space Clouds, Prague); we scale the same model to <span class="highlight">dozens of venues</span> with the same needs: menu boards, promos, branding, and optional upsells (QR codes, live stats, weather-based offers).</p>
+    </div>
+
+    <div class="section">
+      <h2>Problem</h2>
+      <p>Bars, cafes, and restaurants want digital screens for menus and promos, but:</p>
+      <ul>
+        <li><strong>Enterprise tools</strong> (ScreenCloud, etc.) cost $15–20+/screen/month and target large retailers.</li>
+        <li><strong>DIY setups</strong> (Raspberry Pi, USB sticks) are fragile and time-consuming to update.</li>
+        <li><strong>Printed menus</strong> go stale; owners lack time to keep screens and promos in sync.</li>
+        <li>Most options are <strong>software-only</strong>—venues still need designers, video editors, and someone to run it.</li>
+      </ul>
+      <p>Small and mid-size venues are <span class="highlight">underserved</span>: they need something affordable, reliable, and <strong>fully done for them</strong>.</p>
+    </div>
+
+    <div class="section">
+      <h2>Solution</h2>
+      <p><span class="highlight">Browser-based signage</span> on existing TVs (e.g. LG WebOS). Hosted on the web, one short URL per screen. Works with PosterBooking or direct links. No dongles, no Raspberry Pis. Today: <strong>3-screen layout</strong> (logo + two menu/promo screens), looped video, fullscreen. Roadmap: scheduling, QR codes, live stats, weather-based promos.</p>
+      <p><strong><span class="pill pill-gold">Full-service</span> We handle design, graphics, and videos.</strong> Clients give a brief—e.g. “Make this menu,” “We need a weekly rotating menu,” “Happy Hour promo like this”—and we deliver. They don’t need designers or tech skills; we produce and deploy. Simple briefing, we take care of the rest.</p>
+      <div class="cta-box">
+        <h3>See how it works</h3>
+        <p><a href="process-flow-diagram.html">Process flow diagram →</a> Content → Hosting → TV display &amp; update workflow.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Competitive landscape</h2>
+      <p>Existing players either over-serve enterprise or under-serve small venues. None combine <strong>tech + full creative</strong> in one offer.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Pricing</th>
+              <th>Strengths</th>
+              <th>Weaknesses</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ScreenCloud</td>
+              <td>~$20/screen/mo</td>
+              <td>Enterprise features, polished</td>
+              <td>Expensive for SMBs; software-only, no design</td>
+            </tr>
+            <tr>
+              <td>OptiSigns</td>
+              <td>~$10/screen/mo</td>
+              <td>Good templates</td>
+              <td>Complex UI; venues still need to create content</td>
+            </tr>
+            <tr>
+              <td>PosterBooking</td>
+              <td>~$8/screen/mo</td>
+              <td>Simple, affordable</td>
+              <td>Basic features; no creative support</td>
+            </tr>
+            <tr>
+              <td>Yodeck</td>
+              <td>~$8/screen/mo</td>
+              <td>Raspberry Pi ecosystem</td>
+              <td>Hardware-dependent; extra devices to manage</td>
+            </tr>
+            <tr>
+              <td>Rise Vision</td>
+              <td>Free tier</td>
+              <td>Open source</td>
+              <td>Dated UX; technical setup required</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>How we're different</h2>
+      <ul>
+        <li><strong>Full solution, not just software.</strong> We provide design, graphics, and video per client brief. They say what they want; we deliver. No in-house designer or freelancer hunt.</li>
+        <li><strong>No extra hardware.</strong> Runs in the TV browser. No Raspberry Pi, dongles, or dedicated players. Use what they already have.</li>
+        <li><strong>Venue-first.</strong> Built for bars, restaurants, cafes—not enterprise. Templates and workflows match their reality (menus, promos, weekly specials).</li>
+        <li><strong>Cheaper than incumbents.</strong> Target $5–8/screen/month including hosting; undercut PosterBooking/OptiSigns while layering in creative.</li>
+        <li><strong>Proven at a real venue.</strong> Live deployment at Space Clouds; we’ve solved LG TV playback, updates, and reliability in practice.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Cost savings (3-screen venue, annual)</h2>
+      <p>Typical bar/restaurant: 3 screens (e.g. logo + 2× menu/promo). Comparison below is <strong>software/subscription only</strong>. On top of that, venues often pay separately for design, video, and menu updates—we bundle that.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>$/screen/mo</th>
+              <th>3 screens × 12 mo</th>
+              <th>Design / creative</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ScreenCloud</td>
+              <td>~$20</td>
+              <td>~$720/yr</td>
+              <td>Separate (freelancer / agency)</td>
+            </tr>
+            <tr>
+              <td>OptiSigns</td>
+              <td>~$10</td>
+              <td>~$360/yr</td>
+              <td>Separate</td>
+            </tr>
+            <tr>
+              <td>PosterBooking</td>
+              <td>~$8</td>
+              <td>~$288/yr</td>
+              <td>Separate</td>
+            </tr>
+            <tr>
+              <td>Yodeck</td>
+              <td>~$8</td>
+              <td>~$288/yr</td>
+              <td>Separate + RPi hardware</td>
+            </tr>
+            <tr>
+              <td><strong>Us (Venue Signage)</strong></td>
+              <td><strong>$5–6</strong></td>
+              <td><strong class="savings">~$180–216/yr</strong></td>
+              <td><strong>Included</strong> (brief → we deliver)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p><span class="savings">Save ~$70–500+/yr</span> on software alone vs alternatives. Plus: no separate design bills, no Raspberry Pis, no technical overhead. Full-service at a lower total cost.</p>
+    </div>
+
+    <div class="section">
+      <h2>ROI analysis</h2>
+      <p><strong>For venues:</strong> Digital menu boards and promo screens consistently drive measurable returns. Industry studies report <span class="highlight">3–5% uplift in sales</span>, <span class="highlight">18–35% higher average order value</span> when premium items are highlighted, and <span class="highlight">3.7× ROI within 18 months</span> (some deployments hit payback in 9 months). Broader digital-signage strategies show <span class="savings">average ROI of 300%+</span>, with top performers exceeding 500%.</p>
+      <p><strong>Cost savings:</strong> Venues save <strong>€200–800/month</strong> on menu printing and promo materials (€2.4k–9.6k/year). Manual menu updates drop by <strong>2–4 hours/week</strong>; menu-related customer questions fall significantly. Fewer reprints, less waste, faster rollout of weekly specials and Happy Hour.</p>
+      <p><strong>Illustrative venue (3 screens, €500k annual revenue):</strong></p>
+      <ul>
+        <li>Our solution: ~<strong>€200/yr</strong> subscription + setup. Design included per brief.</li>
+        <li>Conservative <strong>3% sales uplift</strong> → <strong>+€15k revenue/year</strong>. After our fees, <span class="savings">net benefit €14k+</span>.</li>
+        <li>Menu printing saved <strong>€3k/yr</strong> → total <strong>€17k+ net benefit</strong>. Payback in weeks, not years.</li>
+      </ul>
+      <p><strong>For investors:</strong> We undercut incumbents on price, bundle creative, and tap a large, underserved EU/CZ hospitality base. Each venue is high-margin recurring revenue; expansion is the same playbook. ROI for venues makes adoption and retention compelling—growth and unit economics improve together.</p>
+    </div>
+
+    <div class="section">
+      <h2>Business model</h2>
+      <p>Monetize as we expand to multiple venues. Full-service is core: clients brief us, we deliver.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Stream</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pill pill-green">Setup</span></td>
+              <td>One-time per venue: branding, screen config, short URLs, onboarding.</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">Subscription</span></td>
+              <td>Monthly per venue or per screen: hosting, updates, support.</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gold">Design &amp; content</span></td>
+              <td>Menus, promos, videos per brief. “Make this menu,” “weekly specials,” etc.—we produce and deploy.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Target <span class="highlight">$5–8/screen/month</span> (or equivalent per-venue plan), undercutting incumbents while bundling creative. Same playbook for every new venue.</p>
+    </div>
+
+    <div class="section">
+      <h2>Market research: Czech Republic &amp; Europe</h2>
+      <p><strong>Czech Republic—our beachhead.</strong> The hospitality market is substantial and growing. <strong>Pubs, bars &amp; coffee shops</strong>: ~1,900+ businesses, €420M+ revenue, <span class="savings">13%+ growth (2020–25)</span>. <strong>Restaurants &amp; takeaways</strong>: ~43,500+ establishments, €6.9B+ revenue, 11%+ growth. <strong>Prague</strong> alone has 4,600+ restaurants and bars (e.g. TripAdvisor), with strong tourism (≈20M paid nights projected 2025, 9% YoY); hotel investment topped €490M YTD 2025. Holešovice, Old Town, and other districts are dense with cocktail bars, cafes, and restaurants—ideal early adopters.</p>
+      <p><strong>Europe—scale opportunity.</strong> EU accommodation &amp; food services generate <strong>€280B+ value added</strong> and employ <strong>9.6M+ people</strong>; the sector is 6%+ of enterprises. Spain, Italy, Germany lead by venue count and employment. <strong>Digital signage</strong> in Europe is <strong>€4–9B</strong> (2024), growing <strong>7–15% CAGR</strong> to 2032–35; <strong>hospitality and F&amp;B</strong> are called out as key application sectors. Demand is driven by dynamic menus, promos, and customer engagement—exactly our use case.</p>
+      <p><strong>Where we deploy.</strong> Start in <strong>Czech Republic</strong> (Prague, Brno, Ostrava, tourist hubs), then expand to <strong>DACH</strong> (Germany, Austria, Switzerland), <strong>CEE</strong> (Poland, Slovakia, Hungary), and other EU markets (Spain, Italy, Portugal) where bars, cafes, and restaurants are dense and underserved by affordable, full-service signage. Same product, same “brief → we deliver” model—localized sales and support.</p>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-num">~45k</div>
+          <div class="stat-label">CZ bars, cafes, restaurants</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">€7B+</div>
+          <div class="stat-label">CZ hospitality revenue</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">€4–9B</div>
+          <div class="stat-label">EU digital signage market</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">7–15%</div>
+          <div class="stat-label">CAGR (EU signage)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Market &amp; traction</h2>
+      <p><strong>Proof of concept:</strong> Live 3-screen deployment at <strong>Space Clouds</strong> (Prague)—signature cocktails, logo loop, stable playback on LG TVs. Real venue, real usage.</p>
+      <p><strong>Target customers:</strong> Bars, cocktail bars, restaurants, cafes, hotels, and multi-venue operators who want consistent, updatable digital signage without enterprise complexity or cost. We focus on <strong>Czech Republic and Europe</strong> first.</p>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Live venue (POC)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Screens per venue</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">€5–7</div>
+          <div class="stat-label">/screen/mo target</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Roadmap (post–seed)</h2>
+      <ul>
+        <li><strong>Multi-venue rollout:</strong> Replicate Space Clouds setup at 5–10 new venues; standardize onboarding and support.</li>
+        <li><strong>Product:</strong> Simple UI for content and screens; scheduling (Happy Hour, daily specials).</li>
+        <li><strong>Upsell features:</strong> QR codes (menu, IG, web), optional live stats, weather-based promos.</li>
+        <li><strong>Partnerships:</strong> Integrate with PosterBooking, menusa.app, and similar tools where it helps adoption.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Use of funds (seed)</h2>
+      <p>Investment accelerates multi-venue expansion and delivery capacity:</p>
+      <ul>
+        <li><strong>Product:</strong> Hosting, scheduling, monitoring—so we scale reliably across venues.</li>
+        <li><strong>Go-to-market:</strong> Sales and onboarding for new venues; case studies and references.</li>
+        <li><strong>Creative &amp; ops:</strong> Design and video capacity, templates, playbooks—so we fulfill “brief → deliver” at scale.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Investment case</h2>
+      <div class="cta-box">
+        <p><strong>Venues get clear ROI</strong> (3–5% sales uplift, €2k–9k/yr menu savings, payback in weeks). <strong>Market is large and growing</strong> (~45k CZ venues, €7B+ revenue; €4–9B EU digital signage, 7–15% CAGR). <strong>We’re different</strong>: full-service (brief → we deliver), no extra hardware, cheaper than incumbents, proven in Prague. Same playbook scales across Czech Republic and Europe. Seed capital accelerates multi-venue rollout and product—now is the time to invest.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Why now</h2>
+      <p>We have a <span class="highlight">working system in production</span>, a clear technical path (web-only, no extra hardware), and a defined customer (venues like Space Clouds). Competitors are either too expensive or too complex for this segment. Seed capital lets us turn one venue into many and build the SaaS layer that makes scaling predictable and profitable.</p>
+    </div>
+
+    <div class="footer">
+      <p><strong>Venue Signage</strong> · Seed pitch · Jan 2026</p>
+      <p class="created-by">Created by Sri</p>
+    </div>
+  </div>
+</body>
+</html>
