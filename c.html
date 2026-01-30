@@ -145,6 +145,23 @@
       }
     });
 
+    // Watchdog to prevent unexpected stops
+    setInterval(() => {
+      // 1. If transitioning too long, force reset
+      if (isTransitioning) {
+        // We rely on the swapVideos timeout (1s) to clear it. 
+        // If it's still true after 3s, something broke.
+        // But we don't track start time here. 
+        // Let's just ensure activePlayer is playing if not transitioning.
+      }
+
+      // 2. Check if stuck
+      if (!isTransitioning && activePlayer.paused && !document.hidden) {
+        console.log("Watchdog: Video shouldn't be paused. Kicking...");
+        playVideo(activePlayer);
+      }
+    }, 2000);
+
     // Click handler for fullscreen and ensuring playback
     function handleClick() {
       if (!document.fullscreenElement) {
