@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceClouds - Tech & Architecture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #40e0d0;
+            --bg: #050510;
+            --text: #ffffff;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(64, 224, 208, 0.15) 0%, transparent 50%);
+            z-index: -1;
+            animation: nebulaFlow 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes nebulaFlow {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scene.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            width: 90%;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+        }
+
+        .tag {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .feature {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Architecture Scene */
+        .screens-layout {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .screen-mockup {
+            width: 280px;
+            height: 157px;
+            background: #111;
+            border: 4px solid #333;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .screen-mockup::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            width: 40px;
+            height: 15px;
+            background: #222;
+        }
+
+        .screen-left {
+            border-color: var(--primary);
+        }
+
+        .screen-center {
+            border-color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .screen-right {
+            border-color: var(--primary);
+        }
+
+        /* Pipeline Scene */
+        .pipeline-flow {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: translateX(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(10px);
+            }
+        }
+
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nebula"></div>
+    <div class="progress-bar" id="progress"></div>
+
+    <!-- Scene 1: Tech Stack -->
+    <div class="scene active" id="scene1">
+        <span class="tag">The Core Technologies</span>
+        <h1>Tech Stack</h1>
+        <div class="grid">
+            <div class="card">
+                <span class="tag">Frontend</span>
+                <span class="feature">HTML5 / CSS3</span>
+            </div>
+            <div class="card">
+                <span class="tag">Logic</span>
+                <span class="feature">Vanilla JS</span>
+            </div>
+            <div class="card">
+                <span class="tag">Hosting</span>
+                <span class="feature">GitHub Pages</span>
+            </div>
+            <div class="card">
+                <span class="tag">Version Control</span>
+                <span class="feature">Git / GitHub</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 2: Architecture -->
+    <div class="scene" id="scene2">
+        <span class="tag">System Layout</span>
+        <h1>Architecture</h1>
+        <div class="screens-layout">
+            <div class="screen-mockup screen-left">LEFT: MENU</div>
+            <div class="screen-mockup screen-center">CENTER: LOGO</div>
+            <div class="screen-mockup screen-right">RIGHT: SPIRITS</div>
+        </div>
+        <p style="margin-top: 3rem; color: #aaa;">Unified 3-Screen Display Solution</p>
+    </div>
+
+    <!-- Scene 3: Automation -->
+    <div class="scene" id="scene3">
+        <span class="tag">Continuous Deployment</span>
+        <h1>The Pipeline</h1>
+        <div class="pipeline-flow">
+            <div class="step">
+                <div class="card">LOCAL EDIT</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <div class="card">GIT PUSH</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <div class="card" style="border-color: var(--secondary)">GITHUB PAGES</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <div class="card" style="background: rgba(64, 224, 208, 0.2)">SMART TV</div>
+            </div>
+        </div>
+        <p style="margin-top: 3rem; color: #aaa;">Auto-Updating & Zero Maintenance</p>
+    </div>
+
+    <script>
+        const scenes = document.querySelectorAll('.scene');
+        const progressBar = document.getElementById('progress');
+        let currentScene = 0;
+        const SCENE_DURATION = 8000; // 8 seconds per scene
+
+        function nextScene() {
+            scenes[currentScene].classList.remove('active');
+            currentScene = (currentScene + 1) % scenes.length;
+            scenes[currentScene].classList.add('active');
+
+            // Reset progress bar
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.transition = `width ${SCENE_DURATION}ms linear`;
+                progressBar.style.width = '100%';
+            }, 50);
+        }
+
+        // Start initial progress bar
+        progressBar.style.transition = `width ${SCENE_DURATION}ms linear`;
+        progressBar.style.width = '100%';
+
+        setInterval(nextScene, SCENE_DURATION);
+    </script>
+</body>
+
+</html>

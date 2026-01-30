@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Clouds TV Display — Process Flow</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+      color: #e6edf3;
+      margin: 0;
+      padding: 40px 24px 60px;
+      min-height: 100vh;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 {
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    .subtitle {
+      text-align: center;
+      color: #8b949e;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .created-by {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e6edf3;
+      margin-bottom: 2rem;
+    }
+    .diagram {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .diagram svg { display: block; margin: 0 auto; }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #58a6ff;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #30363d;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-box {
+      width: 20px;
+      height: 14px;
+      border-radius: 4px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6e7681;
+      margin-top: 2rem;
+    }
+
+    /* Keep dark theme when printing / saving as PDF */
+    @media print {
+      html, body {
+        background: #0d1117 !important;
+        color: #e6edf3 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .container { max-width: 100%; }
+      .diagram {
+        background: #161b22 !important;
+        border-color: #30363d !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .section-title { color: #58a6ff !important; border-color: #30363d !important; }
+      .legend { color: #8b949e !important; }
+      .footer { color: #6e7681 !important; }
+      .created-by { color: #e6edf3 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Space Clouds TV Display — Process Flow</h1>
+    <p class="subtitle">How the 3-screen digital signage system works • Client overview</p>
+    <p class="created-by">Created by Sri</p>
+
+    <div class="section-title">1. High-level: 3-screen setup</div>
+    <div class="diagram">
+      <svg width="100%" height="220" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="tvGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#238636"/>
+            <stop offset="100%" stop-color="#196c2e"/>
+          </linearGradient>
+          <linearGradient id="centerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#1f6feb"/>
+            <stop offset="100%" stop-color="#1158c7"/>
+          </linearGradient>
+        </defs>
+        <!-- TVs -->
+        <rect x="80" y="60" width="140" height="100" rx="8" fill="url(#tvGrad)" stroke="#2ea043" stroke-width="2"/>
+        <text x="150" y="105" fill="#fff" text-anchor="middle" font-size="14" font-weight="600">Left TV</text>
+        <text x="150" y="125" fill="#7ee787" text-anchor="middle" font-size="11">Signature</text>
+        <text x="150" y="140" fill="#7ee787" text-anchor="middle" font-size="11">Cocktails 1</text>
+        <text x="150" y="185" fill="#b1f0b6" text-anchor="middle" font-size="10">tinyurl.com/sclv1</text>
+
+        <rect x="330" y="40" width="140" height="140" rx="8" fill="url(#centerGrad)" stroke="#388bfd" stroke-width="2"/>
+        <text x="400" y="95" fill="#fff" text-anchor="middle" font-size="14" font-weight="600">Center TV</text>
+        <text x="400" y="115" fill="#a5d6ff" text-anchor="middle" font-size="11">Logo</text>
+        <text x="400" y="130" fill="#a5d6ff" text-anchor="middle" font-size="11">Animation</text>
+        <text x="400" y="195" fill="#79c0ff" text-anchor="middle" font-size="10">tinyurl.com/scev1</text>
+
+        <rect x="580" y="60" width="140" height="100" rx="8" fill="url(#tvGrad)" stroke="#2ea043" stroke-width="2"/>
+        <text x="650" y="105" fill="#fff" text-anchor="middle" font-size="14" font-weight="600">Right TV</text>
+        <text x="650" y="125" fill="#7ee787" text-anchor="middle" font-size="11">Signature</text>
+        <text x="650" y="140" fill="#7ee787" text-anchor="middle" font-size="11">Cocktails 2</text>
+        <text x="650" y="185" fill="#b1f0b6" text-anchor="middle" font-size="10">tinyurl.com/scrgtv1</text>
+
+        <!-- Arrows between TVs -->
+        <path d="M 230 110 L 320 110" stroke="#8b949e" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+        <path d="M 480 110 L 570 110" stroke="#8b949e" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+          <polygon points="0 0, 8 4, 0 8" fill="#8b949e"/>
+        </marker>
+      </svg>
+    </div>
+
+    <div class="section-title">2. End-to-end flow: Content → TV</div>
+    <div class="diagram">
+      <svg width="100%" height="280" viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+            <polygon points="0 0, 10 5, 0 10" fill="#58a6ff"/>
+          </marker>
+        </defs>
+        <!-- Row 1: Content -->
+        <rect x="20" y="20" width="120" height="50" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="80" y="48" fill="#e6edf3" text-anchor="middle" font-size="12" font-weight="600">Video assets</text>
+        <text x="80" y="62" fill="#8b949e" text-anchor="middle" font-size="10">MP4 (HEVC/H.264)</text>
+
+        <path d="M 150 45 L 200 45" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <text x="172" y="38" fill="#58a6ff" text-anchor="middle" font-size="9">host</text>
+
+        <rect x="200" y="20" width="130" height="50" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="265" y="48" fill="#e6edf3" text-anchor="middle" font-size="12" font-weight="600">HTML pages</text>
+        <text x="265" y="62" fill="#8b949e" text-anchor="middle" font-size="10">l.html, c.html, r.html</text>
+
+        <path d="M 340 45 L 390 45" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <text x="362" y="38" fill="#58a6ff" text-anchor="middle" font-size="9">deploy</text>
+
+        <rect x="390" y="20" width="140" height="50" rx="6" fill="#238636" stroke="#2ea043" stroke-width="1.5"/>
+        <text x="460" y="48" fill="#fff" text-anchor="middle" font-size="12" font-weight="600">GitHub Pages</text>
+        <text x="460" y="62" fill="#7ee787" text-anchor="middle" font-size="10">Live URLs, auto-updates</text>
+
+        <path d="M 540 45 L 590 45" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <text x="562" y="38" fill="#58a6ff" text-anchor="middle" font-size="9">open</text>
+
+        <rect x="590" y="20" width="130" height="50" rx="6" fill="#1f6feb" stroke="#388bfd" stroke-width="1.5"/>
+        <text x="655" y="48" fill="#fff" text-anchor="middle" font-size="12" font-weight="600">LG TV browser</text>
+        <text x="655" y="62" fill="#a5d6ff" text-anchor="middle" font-size="10">or PosterBooking</text>
+
+        <path d="M 730 45 L 780 45" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <text x="752" y="38" fill="#58a6ff" text-anchor="middle" font-size="9">display</text>
+
+        <rect x="780" y="20" width="90" height="50" rx="6" fill="#8957e5" stroke="#a371f7" stroke-width="1.5"/>
+        <text x="825" y="45" fill="#fff" text-anchor="middle" font-size="12" font-weight="600">Fullscreen</text>
+        <text x="825" y="60" fill="#d2a8ff" text-anchor="middle" font-size="10">loop video</text>
+
+        <!-- Row 2: Update process -->
+        <text x="450" y="115" fill="#8b949e" text-anchor="middle" font-size="11">Content update process (you control)</text>
+        <rect x="80" y="130" width="110" height="44" rx="6" fill="#21262d" stroke="#30363d"/>
+        <text x="135" y="152" fill="#e6edf3" text-anchor="middle" font-size="11">1. Replace video</text>
+        <text x="135" y="165" fill="#8b949e" text-anchor="middle" font-size="10">in folder</text>
+
+        <path d="M 200 152 L 250 152" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <rect x="250" y="130" width="110" height="44" rx="6" fill="#21262d" stroke="#30363d"/>
+        <text x="305" y="152" fill="#e6edf3" text-anchor="middle" font-size="11">2. Git push</text>
+        <text x="305" y="165" fill="#8b949e" text-anchor="middle" font-size="10">to GitHub</text>
+
+        <path d="M 370 152 L 420 152" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <rect x="420" y="130" width="130" height="44" rx="6" fill="#21262d" stroke="#30363d"/>
+        <text x="485" y="152" fill="#e6edf3" text-anchor="middle" font-size="11">3. Pages rebuild</text>
+        <text x="485" y="165" fill="#8b949e" text-anchor="middle" font-size="10">(1–2 min)</text>
+
+        <path d="M 560 152 L 610 152" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <rect x="610" y="130" width="150" height="44" rx="6" fill="#21262d" stroke="#30363d"/>
+        <text x="685" y="152" fill="#e6edf3" text-anchor="middle" font-size="11">4. TV refreshes</text>
+        <text x="685" y="165" fill="#8b949e" text-anchor="middle" font-size="10">(or auto every 6h)</text>
+
+        <!-- Row 3: TV setup -->
+        <text x="450" y="215" fill="#8b949e" text-anchor="middle" font-size="11">TV setup (one-time per screen)</text>
+        <rect x="120" y="225" width="100" height="38" rx="6" fill="#21262d" stroke="#30363d"/>
+        <text x="170" y="247" fill="#e6edf3" text-anchor="middle" font-size="11">Open short URL</text>
+        <path d="M 230 244 L 270 244" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <rect x="270" y="225" width="100" height="38" rx="6" fill="#21262d" stroke="#30363d"/>
+        <text x="320" y="247" fill="#e6edf3" text-anchor="middle" font-size="11">Click → fullscreen</text>
+        <path d="M 380 244 L 420 244" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+        <rect x="420" y="225" width="140" height="38" rx="6" fill="#238636" stroke="#2ea043"/>
+        <text x="490" y="247" fill="#fff" text-anchor="middle" font-size="11">Video loops forever</text>
+      </svg>
+    </div>
+
+    <div class="section-title">3. Technical architecture</div>
+    <div class="diagram">
+      <svg width="100%" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="40" y="30" width="160" height="70" rx="8" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="120" y="55" fill="#58a6ff" text-anchor="middle" font-size="12" font-weight="600">Hosting</text>
+        <text x="120" y="72" fill="#8b949e" text-anchor="middle" font-size="10">GitHub Pages</text>
+        <text x="120" y="88" fill="#e6edf3" text-anchor="middle" font-size="10">Live URLs, free</text>
+
+        <rect x="240" y="30" width="160" height="70" rx="8" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="320" y="55" fill="#58a6ff" text-anchor="middle" font-size="12" font-weight="600">Format</text>
+        <text x="320" y="72" fill="#8b949e" text-anchor="middle" font-size="10">HTML5 / CSS3 / JS</text>
+        <text x="320" y="88" fill="#e6edf3" text-anchor="middle" font-size="10">No app install</text>
+
+        <rect x="440" y="30" width="160" height="70" rx="8" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="520" y="55" fill="#58a6ff" text-anchor="middle" font-size="12" font-weight="600">Resolution</text>
+        <text x="520" y="72" fill="#8b949e" text-anchor="middle" font-size="10">1920×1080 / 2048×1152</text>
+        <text x="520" y="88" fill="#e6edf3" text-anchor="middle" font-size="10">Full HD</text>
+
+        <rect x="640" y="30" width="160" height="70" rx="8" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="720" y="55" fill="#58a6ff" text-anchor="middle" font-size="12" font-weight="600">Playback</text>
+        <text x="720" y="72" fill="#8b949e" text-anchor="middle" font-size="10">Loop, mute, autoplay</text>
+        <text x="720" y="88" fill="#e6edf3" text-anchor="middle" font-size="10">Click = fullscreen</text>
+
+        <rect x="140" y="130" width="200" height="55" rx="8" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="240" y="152" fill="#e6edf3" text-anchor="middle" font-size="11" font-weight="600">Video codec: HEVC or H.264</text>
+        <text x="240" y="168" fill="#8b949e" text-anchor="middle" font-size="10">MP4, AAC audio · &lt;15MB preferred</text>
+
+        <rect x="460" y="130" width="200" height="55" rx="8" fill="#21262d" stroke="#30363d" stroke-width="1.5"/>
+        <text x="560" y="152" fill="#e6edf3" text-anchor="middle" font-size="11" font-weight="600">Devices: LG TV browser</text>
+        <text x="560" y="168" fill="#8b949e" text-anchor="middle" font-size="10">or PosterBooking / signage app</text>
+      </svg>
+    </div>
+
+    <div class="section-title">4. Screen ↔ content mapping</div>
+    <div class="diagram">
+      <svg width="100%" height="160" viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="30" width="180" height="100" rx="8" fill="#21262d" stroke="#30363d"/>
+        <text x="120" y="55" fill="#e6edf3" text-anchor="middle" font-size="12" font-weight="600">Left (l.html)</text>
+        <text x="120" y="78" fill="#8b949e" text-anchor="middle" font-size="11">Signature Cocktails Menu 2</text>
+        <text x="120" y="95" fill="#7ee787" text-anchor="middle" font-size="10">screens/right/v002/...mp4</text>
+        <text x="120" y="118" fill="#6e7681" text-anchor="middle" font-size="10">tinyurl.com/sclv1</text>
+
+        <rect x="260" y="20" width="180" height="120" rx="8" fill="#1f6feb" stroke="#388bfd"/>
+        <text x="350" y="50" fill="#fff" text-anchor="middle" font-size="12" font-weight="600">Center (c.html)</text>
+        <text x="350" y="75" fill="#a5d6ff" text-anchor="middle" font-size="11">Logo animation</text>
+        <text x="350" y="95" fill="#79c0ff" text-anchor="middle" font-size="10">screens/center/Logo_animation...</text>
+        <text x="350" y="130" fill="#58a6ff" text-anchor="middle" font-size="10">tinyurl.com/scev1</text>
+
+        <rect x="490" y="30" width="180" height="100" rx="8" fill="#21262d" stroke="#30363d"/>
+        <text x="580" y="55" fill="#e6edf3" text-anchor="middle" font-size="12" font-weight="600">Right (r.html)</text>
+        <text x="580" y="78" fill="#8b949e" text-anchor="middle" font-size="11">Signature Cocktails Menu 1</text>
+        <text x="580" y="95" fill="#7ee787" text-anchor="middle" font-size="10">screens/left/V002/...mp4</text>
+        <text x="580" y="118" fill="#6e7681" text-anchor="middle" font-size="10">tinyurl.com/scrgtv1</text>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-box" style="background:#238636;"></span> GitHub / Live</div>
+      <div class="legend-item"><span class="legend-box" style="background:#1f6feb;"></span> Center / Logo</div>
+      <div class="legend-item"><span class="legend-box" style="background:#8957e5;"></span> Output / Display</div>
+      <div class="legend-item"><span class="legend-box" style="background:#21262d; border:1px solid #30363d;"></span> Process step</div>
+    </div>
+
+    <p class="footer">Space Clouds TV Display · Process flow diagram · Jan 2026</p>
+  </div>
+</body>
+</html>

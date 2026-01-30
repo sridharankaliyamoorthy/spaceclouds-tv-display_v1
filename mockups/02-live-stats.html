@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup: Live Stats & Gamification</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    .screen {
+      width: 1920px;
+      height: 1080px;
+      background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
+      position: relative;
+      transform: scale(0.5);
+      transform-origin: center;
+      padding: 60px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .header h1 {
+      font-size: 100px;
+      font-weight: bold;
+      background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+    .countdown {
+      font-size: 80px;
+      color: #ffd700;
+      font-weight: bold;
+      text-shadow: 0 0 30px rgba(255,215,0,0.5);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 30px;
+      padding: 50px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .stat-card:hover {
+      transform: scale(1.05);
+    }
+    .stat-icon {
+      font-size: 100px;
+      margin-bottom: 20px;
+    }
+    .stat-number {
+      font-size: 120px;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 20px rgba(255,215,0,0.3);
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 42px;
+      color: rgba(255,255,255,0.9);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .leaderboard {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 30px;
+      padding: 40px 60px;
+    }
+    .leaderboard h2 {
+      font-size: 60px;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #ffd700;
+    }
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 30px;
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 15px;
+      border-radius: 15px;
+      font-size: 40px;
+    }
+    .rank {
+      font-size: 50px;
+      font-weight: bold;
+      width: 80px;
+    }
+    .rank-1 { color: #ffd700; }
+    .rank-2 { color: #c0c0c0; }
+    .rank-3 { color: #cd7f32; }
+    .drink-name {
+      flex: 1;
+      margin-left: 30px;
+    }
+    .orders {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <div class="header">
+      <h1>TONIGHT'S ENERGY</h1>
+      <div class="countdown">⏰ Happy Hour Ends in 42:15</div>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🍹</div>
+        <div class="stat-number">247</div>
+        <div class="stat-label">Cocktails Served</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-number">89%</div>
+        <div class="stat-label">Happy Hour Orders</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-number">12</div>
+        <div class="stat-label">Minutes Avg Wait</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🎉</div>
+        <div class="stat-number">156</div>
+        <div class="stat-label">Guests Tonight</div>
+      </div>
+    </div>
+    
+    <div class="leaderboard">
+      <h2>🏆 TOP DRINKS TONIGHT</h2>
+      <div class="leaderboard-item">
+        <span class="rank rank-1">1.</span>
+        <span class="drink-name">Space Bubbles</span>
+        <span class="orders">67 orders</span>
+      </div>
+      <div class="leaderboard-item">
+        <span class="rank rank-2">2.</span>
+        <span class="drink-name">Cosmic Teq-tini</span>
+        <span class="orders">54 orders</span>
+      </div>
+      <div class="leaderboard-item">
+        <span class="rank rank-3">3.</span>
+        <span class="drink-name">Cloud</span>
+        <span class="orders">41 orders</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

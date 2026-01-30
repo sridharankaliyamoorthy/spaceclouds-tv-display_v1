@@ -1,0 +1,35 @@
+i will explain the process we need to automate robust pipeline in our ERP -
+
+We are giving solutions on following way 
+1.services 
+we will provide services to our clients they will give us raw materials  and we will make the final product based on the requirements we recived on the raw materials in delivery not usually it will the printed pdf delivery note which will be given to us attached the pdf delivery note for ur refrence. some times we will recive the orders with manually hand wriiten notes or by email or sms .
+once we recived the orders we will  check the raw materials from the orders like the follow ing DETAILS OF PRODUCT DELIVERED:
+
+Number of bags		Product name.                                Weight (grams)		NOTES
+
+manager will check the orders and will update the orders in the ERP system and will ask production team to validate the raw materials  and check the weight and notes it has to match 100% otherwise
+we need to flag it to manager he will inform the client to rectify the issue  otherwise GOOD RECEIVED IN PROPER CONDITION  checked BY;our prodction team members 
+
+Name:	     
+
+before starting the productions they will inform the manager for delivery time like 1 or 2 days - manager will also give the deadline based on the prity if we received multiple orders manager needs to know how much man power we have to process all the orders like that we neeed to automates this also,
+than start processing the orders based on the requirements during the process each prodcut will have some wastage we need add these details to the ERP system  on the production order 
+ list named Processed weights and wastege we called trim - for example we recived 4333 grams of products during the production trim will be 553 grams net will be remianing wight 3780 grams 
+
+ we need to update the trim details to the ERP system on the production order and send it to the manager for approval - we need these stages - Not Started
+On Hold
+In Progress
+In Progress
+Client approved
+In Progress
+Approved
+Pending Client Review
+
+like that i am just giving you the process we need to automate the pipeline in our ERP system 
+
+can we deisgn the entire process in the ERP system completely automate right now manuall w eare doings takes lots of time its mess and not efficient . you can also recoomend the best practices to make it more efficient and automated also any hardware requirements to 
+make it more effect like QR code , kiosk montir display etc .
+
+2. e commerce way of selling 
+clinet will places the orders on the website  or though sms  or email or phone call  any possible way like example they need 500 units of cone like that and we will process the orders and deliver it to the client we need to follow the same process like services i explained 
+
