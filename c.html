@@ -28,196 +28,44 @@
   </style>
 </head>
 
-<body onclick="handleClick()">
+<body onclick="toggleFullScreen()">
   <div class="slideshow-container">
-    <video id="video1" class="slide active" muted playsinline autoplay preload="auto" webkit-playsinline="true"
+    <video id="video-slide" muted playsinline loop autoplay preload="auto" webkit-playsinline="true"
       x-webkit-airplay="allow">
-      <source src="" type="video/mp4" />
-    </video>
-    <video id="video2" class="slide" muted playsinline preload="auto" webkit-playsinline="true"
-      x-webkit-airplay="allow">
-      <source src="" type="video/mp4" />
+      <source src="screens/center/center_screen_full_video_lg.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
     </video>
   </div>
 
   <script>
-    const video1 = document.getElementById("video1");
-    const video2 = document.getElementById("video2");
-    const videoSources = [
-      "screens/center/Logo_animation_lg.mp4",
-      "screens/center/Mystery_shot_lg.mp4"
-    ];
+    const video = document.getElementById("video-slide");
 
-    let currentVideoIndex = 0;
-    let activePlayer = video1;
-    let nextPlayer = video2;
-    let isTransitioning = false;
+    // Start playback on load
+    window.addEventListener("load", () => {
+      video.play().catch((e) => console.log("Waiting for user interaction"));
+    });
 
-    function init() {
-      // Setup initial state
-      video1.src = videoSources[0];
-      video2.src = videoSources[1]; // Preload next
-
-      video1.load();
-      video2.load();
-
-      // Attempt to play first one
-      playVideo(video1);
-    }
-
-    function playVideo(player) {
-      const playPromise = player.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.log("Play failed (interrupted or hidden):", error);
-          // If play fails, we might need manual interaction or it will retry on click
-        });
-      }
-    }
-
-    function swapVideos() {
-      if (isTransitioning) return;
-      isTransitioning = true;
-
-      // Calculate next index
-      const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-      const futureIndex = (nextIndex + 1) % videoSources.length;
-
-      // Play next video immediately
-      nextPlayer.play().then(() => {
-        // Wait for connection to actually have a frame ready
-        const onFrameReady = () => {
-          if (nextPlayer.currentTime > 0) {
-            nextPlayer.removeEventListener('timeupdate', onFrameReady);
-
-            // Fade in next player NOW that we know it has data
-            nextPlayer.classList.add('active');
-
-            // Wait for CSS transition (1s)
-            setTimeout(() => {
-              // Cleanup old active player
-              activePlayer.classList.remove('active');
-              activePlayer.pause();
-              activePlayer.currentTime = 0;
-
-              // Prepare for FUTURE
-              activePlayer.src = videoSources[futureIndex];
-              activePlayer.load();
-
-              // Swap references
-              [activePlayer, nextPlayer] = [nextPlayer, activePlayer];
-              currentVideoIndex = nextIndex;
-
-              isTransitioning = false;
-            }, 1000);
-          }
-        };
-
-        nextPlayer.addEventListener('timeupdate', onFrameReady);
-
-      }).catch(e => {
-        console.error("Next video failed to play:", e);
-        isTransitioning = false;
-        setTimeout(swapVideos, 2000);
-      });
-    }
-
-    // Visibility API Implementation
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        // Optional: pause? No, let it run/buffer.
-      } else {
-        // Wake up if paused strangely
-        if (activePlayer.paused && !isTransitioning) {
-          playVideo(activePlayer);
-        }
+    // Ensure video plays on any user interaction
+    document.body.addEventListener('click', () => {
+      if (video.paused) {
+        video.play();
       }
     });
 
-    // Watchdog to prevent unexpected stops
-    setInterval(() => {
-      // 1. If transitioning too long, force reset
-      if (isTransitioning) {
-        // We rely on the swapVideos timeout (1s) to clear it. 
-        // If it's still true after 3s, something broke.
-        // Reset everything.
-        console.log("Watchdog: Transition timed out. Forcing reset...");
-        activePlayer.classList.remove('active');
-        activePlayer.pause();
-
-        // Ensure next player is active
-        nextPlayer.classList.add('active');
-        playVideo(nextPlayer);
-
-        // Swap ref
-        activePlayer = nextPlayer;
-        // Find who the OTHER one is
-        nextPlayer = (activePlayer === video1) ? video2 : video1;
-
-        // Set next player source correctly based on current index
-        const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-        currentVideoIndex = nextIndex;
-        const futureIndex = (nextIndex + 1) % videoSources.length;
-
-        nextPlayer.classList.remove('active');
-        nextPlayer.src = videoSources[futureIndex];
-        nextPlayer.load();
-
-        isTransitioning = false;
+    // Resume on visibility change (wake from sleep)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && video.paused) {
+        video.play();
       }
+    });
 
-      // 2. Check if stuck paused (only if visible)
-      if (!isTransitioning && activePlayer.paused && !document.hidden) {
-        console.log("Watchdog: Video shouldn't be paused. Kicking...");
-        playVideo(activePlayer);
-      }
-    }, 4000); // 4s check (longer than 1s transition)
-
-    // Click handler for fullscreen and ensuring playback
-    function handleClick() {
+    function toggleFullScreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          console.log("Fullscreen error:", err);
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.log(`Error: ${err.message}`);
         });
       }
-
-      // Only attempt to play if we are NOT transitioning and it's paused.
-      if (!isTransitioning && activePlayer.paused) {
-        playVideo(activePlayer);
-      }
     }
-
-    // Attach listeners
-    [video1, video2].forEach(player => {
-      // Use 'timeupdate' for pre-emptive cross-fade
-      player.addEventListener('timeupdate', () => {
-        if (player === activePlayer && !isTransitioning) {
-          const timeRemaining = player.duration - player.currentTime;
-          // Start transition 1s before end
-          if (timeRemaining < 1.0 && timeRemaining > 0) {
-            swapVideos();
-          }
-        }
-      });
-
-      // Fallback: Ends
-      player.addEventListener('ended', () => {
-        if (player === activePlayer && !isTransitioning) {
-          swapVideos();
-        }
-      });
-
-      // Error recovery
-      player.addEventListener('error', (e) => {
-        console.error("Video Error:", e);
-        if (player === activePlayer) {
-          swapVideos();
-        }
-      });
-    });
-
-    window.addEventListener("load", init);
-
   </script>
 </body>
 
