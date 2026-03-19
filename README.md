@@ -89,6 +89,9 @@ The system is **fully automated** for daily updates:
 - **Video not playing?** Check the codec (must be HEVC for high-res)
 - **Black screen?** Clear browser cache: Settings → Clear Cache
 - **Buffering?** Check internet connection (minimum 5 Mbps recommended)
+- **404 Page Not Found on Live URLs?** 
+  - Ensure `index.html` links correctly map to `l.html`, `c.html`, and `r.html`.
+  - **IMPORTANT:** If the repository visibility is changed from "Public" to "Private" and back, GitHub Pages terminates. You must manually re-enable GitHub Pages from Settings -> Pages, or use the GitHub CLI (`gh api -X POST repos/[owner]/[repo]/pages ...`) to rebuild the site.
 
 ### Cache Busting
 If the TV shows old content, add `?v=2` to the URL:
@@ -115,3 +118,10 @@ https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/l.html?v=2
 - **Left**: https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/l.html
 - **Center**: https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/c.html
 - **Right**: https://sridharankaliyamoorthy.github.io/spaceclouds-tv-display_v1/r.html
+
+## 📝 Version Notes & Issue Log
+
+### March 2026 Update
+- **Issue fixed:** Client reported 404 errors on the TV display hub.
+- **Root Cause & Fix 1:** The `index.html` file had incorrect href links pointing to `left.html`, `center.html`, and `right.html`. Fixed them to point strictly to the physical files `l.html`, `c.html`, and `r.html`.
+- **Root Cause & Fix 2:** The repository visibility was temporarily toggled to "Private", which permanently disabled GitHub Pages until it was manually re-enabled. Re-enabled GitHub Pages deployment via the `gh` CLI to restore the live links.
