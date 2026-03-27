@@ -13,6 +13,12 @@
         padding: 0;
         overflow: hidden;
       }
+      .video-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+      }
       video {
         position: absolute;
         top: 0;
@@ -20,25 +26,31 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transform: translateZ(0);
+        transform: translateZ(0); /* Hardware acceleration */
         -webkit-transform: translateZ(0);
       }
     </style>
   </head>
   <body onclick="toggleFullScreen()">
-    <div class="slideshow-container">
-      <video id="video-slide" muted playsinline loop autoplay preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
-        <source src="screens/right/v002/Signtaure_contail_menu_2_h264.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
+    <div class="video-container">
+      <video id="video-player" muted playsinline preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
+        <source src="screens/right/V003/HK_Lt_01_h264.mp4" type="video/mp4" />
       </video>
     </div>
 
     <script>
-      const video = document.getElementById("video-slide");
+      const video = document.getElementById("video-player");
 
-      // Start playback on load
+      // Start the video
       window.addEventListener("load", () => {
-        video.play().catch((e) => console.log("Waiting for user interaction"));
+        video.play().catch(e => console.log("Waiting for user interaction", e));
+      });
+
+      // MANUALLY LOOP THE VIDEO to prevent LG TV memory leaks. 
+      // Do not use the HTML5 'loop' attribute on WebOS.
+      video.addEventListener('ended', () => {
+        video.currentTime = 0.1; // Reset to start
+        video.play().catch(e => console.log("Play failed", e));
       });
 
       // Ensure video plays on any user interaction
