@@ -96,6 +96,9 @@
       const nowInSeconds = Date.now() / 1000;
       video.currentTime = nowInSeconds % VIDEO_DURATION;
       video.play().catch(e => console.log("Play failed", e));
+
+      // Log successful loop completion to telemetry
+      sendTelemetry('LoopEnd');
     });
 
     // Ensure video plays on any user interaction
@@ -111,6 +114,36 @@
         video.play();
       }
     });
+
+    // --- MR. ROOT TELEMETRY HUB ---
+    // Real-time tracking for the glassmorphic Command Center.
+    const SB_URL = 'YOUR_SUPABASE_URL'; 
+    const SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const SCREEN_ID = 'Center'; 
+    const VERSION = CURRENT_DEPLOYMENT_VERSION;
+
+    function sendTelemetry(eventType) {
+      if (!SB_URL || SB_URL.includes('YOUR_SUPABASE')) return;
+      
+      const TELEMETRY_ENDPOINT = `${SB_URL}/rest/v1/telemetry`;
+      const data = { screen_id: SCREEN_ID, event_type: eventType, version: VERSION };
+      
+      const headers = {
+        'Content-Type': 'application/json',
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`
+      };
+
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(TELEMETRY_ENDPOINT, JSON.stringify(data));
+      } else {
+        fetch(TELEMETRY_ENDPOINT, { method: 'POST', headers: headers, body: JSON.stringify(data) }).catch(() => {});
+      }
+    }
+
+    // Initial Uptime Pulse & 10-Minute Heartbeat
+    window.addEventListener('load', () => sendTelemetry('InitialBoot'));
+    setInterval(() => sendTelemetry('Heartbeat'), 600000); 
 
     function toggleFullScreen() {
       if (!document.fullscreenElement) {

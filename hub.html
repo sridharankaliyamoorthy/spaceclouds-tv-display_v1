@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Root | Digital Signage Command Center</title>
+    <!-- Google Fonts: Orbitron for tech feel, Inter for readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-deep: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-red: #f87171;
+            --accent-orange: #fb923c;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --glow-blue: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        h1 span { color: var(--text-main); font-weight: 700; }
+
+        /* Status Bar */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .status-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
+
+        .status-label { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
+        .status-indicator { font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; }
+        
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .online { color: var(--accent-green); }
+        .online .dot { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
+        .offline { color: var(--accent-red); }
+        .offline .dot { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
+        .warning { color: var(--accent-orange); }
+        .warning .dot { background: var(--accent-orange); box-shadow: 0 0 10px var(--accent-orange); }
+
+        /* Main KPIs */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .kpi-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: var(--text-dim); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .kpi-value { font-family: 'Orbitron', sans-serif; font-size: 4rem; font-weight: 700; color: var(--text-main); text-shadow: var(--glow-blue); }
+        .kpi-value.green { color: #a7f3d0; text-shadow: 0 0 20px rgba(74, 222, 128, 0.4); }
+
+        /* Charts */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            height: 300px;
+        }
+
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px; }
+        .chart-title { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+        @media (max-width: 768px) {
+            .kpi-grid, .chart-grid { grid-template-columns: 1fr; }
+            .kpi-value { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Digital Signage <span>Command Center</span></h1>
+        </header>
+
+        <!-- Node Status Bar -->
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-label">Screen L</div>
+                <div id="status-l" class="status-indicator online"><div class="dot"></div> Online</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Screen C</div>
+                <div id="status-c" class="status-indicator online"><div class="dot"></div> Online</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Screen R</div>
+                <div id="status-r" class="status-indicator online"><div class="dot"></div> Online</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Screen HC</div>
+                <div id="status-hc" class="status-indicator warning"><div class="dot"></div> Warning</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Global Master</div>
+                <div class="status-indicator online"><div class="dot"></div> Linked</div>
+            </div>
+        </div>
+
+        <!-- Major KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">Total Loops</div>
+                <div id="kpi-loops" class="kpi-value">128,450</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Network Uptime</div>
+                <div id="kpi-uptime" class="kpi-value green">99.98%</div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="chart-grid">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <span class="chart-title">Playback Analytics</span>
+                </div>
+                <canvas id="playbackChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-header">
+                    <span class="chart-title">Network Performance</span>
+                </div>
+                <canvas id="networkChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CHART INITIALIZATION ---
+        const ctxPlayback = document.getElementById('playbackChart').getContext('2d');
+        const playbackChart = new Chart(ctxPlayback, {
+            type: 'line',
+            data: {
+                labels: ['1pm', '2pm', '3pm', '4pm', '5pm', '6pm'],
+                datasets: [{
+                    label: 'Loops per Hour',
+                    data: [120, 150, 140, 190, 180, 210],
+                    borderColor: '#38bdf8',
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        const ctxNetwork = document.getElementById('networkChart').getContext('2d');
+        const networkChart = new Chart(ctxNetwork, {
+            type: 'bar',
+            data: {
+                labels: ['L', 'C', 'R', 'HC'],
+                datasets: [{
+                    label: 'Latency (ms)',
+                    data: [15, 12, 18, 45],
+                    backgroundColor: '#38bdf8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // --- REAL-TIME SUPABASE LOGIC ---
+        // (Architect: Replace with your actual Supabase URL and Key to activate live data)
+        const SB_URL = 'YOUR_SUPABASE_URL';
+        const SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        if (SB_URL !== 'YOUR_SUPABASE_URL') {
+            const supabase = supabase.createClient(SB_URL, SB_KEY);
+            
+            // Listen for new telemetry entries
+            supabase.channel('telemetry-changes')
+              .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'telemetry' }, payload => {
+                updateDashboard(payload.new);
+              })
+              .subscribe();
+        }
+
+        function updateDashboard(data) {
+            console.log("New Telemetry Inbound:", data);
+            // Dynamic logic to update KPI numbers and Status colors goes here
+        }
+    </script>
+</body>
+</html>
