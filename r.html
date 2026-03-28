@@ -92,6 +92,22 @@
         }
       });
 
+      // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
+      // The TV secretly checks GitHub version.json every 3 minutes. 
+      // If you bump the version, it completely refreshes the browser autonomously!
+      const CURRENT_DEPLOYMENT_VERSION = 1;
+      setInterval(() => {
+        fetch(`version.json?t=${Date.now()}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.version > CURRENT_DEPLOYMENT_VERSION) {
+              console.log("New video deployment detected! Rebooting screen natively...");
+              window.location.reload(true);
+            }
+          })
+          .catch(err => console.log("Update check failed (Normal if offline):", err));
+      }, 180000); // 180,000ms = 3 minutes
+
       function toggleFullScreen() {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch((err) => {
