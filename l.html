@@ -40,17 +40,41 @@
 
     <script>
       const video = document.getElementById("video-player");
+      const VIDEO_DURATION = 17.000; // Exact length of our perfectly synced video
 
-      // Start the video
-      video.play().catch(e => console.log("Waiting for user interaction", e));
+      // Start the video on load
       window.addEventListener("load", () => {
         video.play().catch(e => console.log("Waiting for user interaction", e));
+        // Start the master synchronization global loop
+        setInterval(syncToGlobalClock, 250);
       });
 
-      // MANUALLY LOOP THE VIDEO to prevent LG TV memory leaks. 
-      // Do not use the HTML5 'loop' attribute on WebOS.
+      // The Master Global Clock Sync Function
+      // Forces the three independent smart TVs to align their playback position to the absolute real-world time.
+      function syncToGlobalClock() {
+        if (!video.duration || video.paused) return; // Do not interrupt if not ready
+
+        // Calculate the global timeline position, modulo 17 seconds
+        const nowInSeconds = Date.now() / 1000;
+        const expectedTimelineTarget = nowInSeconds % VIDEO_DURATION;
+
+        // How far off is this TV from the absolute timeline?
+        const drift = Math.abs(video.currentTime - expectedTimelineTarget);
+
+        // WebOS seeking is computationally heavy relative to playback.
+        // Force an explicit seek alignment ONLY if the screen is visibly drifting apart (>0.30 seconds off)
+        // We also ignore the extreme loop boundaries (<0.5, >16.5) to avoid fighting the natural loop reset
+        if (drift > 0.30 && drift < (VIDEO_DURATION - 0.5)) {
+          console.log(`Syncing Screen: Drift detected at ${drift.toFixed(2)}s`);
+          video.currentTime = expectedTimelineTarget;
+        }
+      }
+
+      // MANUALLY LOOP THE VIDEO to prevent LG TV memory leaks, safely aligning it to the global clock start boundary.
       video.addEventListener('ended', () => {
-        video.currentTime = 0.1; // Reset to start
+        // Upon hardware video 'ended', recalculate perfect start time rather than blindly jumping to 0.1
+        const nowInSeconds = Date.now() / 1000;
+        video.currentTime = nowInSeconds % VIDEO_DURATION;
         video.play().catch(e => console.log("Play failed", e));
       });
 
