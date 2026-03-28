@@ -254,24 +254,57 @@
         });
 
         // --- REAL-TIME SUPABASE LOGIC ---
-        // (Architect: Replace with your actual Supabase URL and Key to activate live data)
-        const SB_URL = 'YOUR_SUPABASE_URL';
-        const SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const SB_URL = 'https://lvlntilkvcmenzjyehng.supabase.co';
+        const SB_KEY = 'sb_publishable_sXwfUaWk9W8RpmUfHcdlBw_aD8hjRUj';
         
+        let supabaseClient = null;
         if (SB_URL !== 'YOUR_SUPABASE_URL') {
-            const supabase = supabase.createClient(SB_URL, SB_KEY);
+            supabaseClient = supabase.createClient(SB_URL, SB_KEY);
             
-            // Listen for new telemetry entries
-            supabase.channel('telemetry-changes')
+            // Initial Data Fetch
+            fetchInitialStats();
+
+            // Listen for new telemetry entries (Realtime)
+            supabaseClient.channel('telemetry-changes')
               .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'telemetry' }, payload => {
-                updateDashboard(payload.new);
+                handleNewData(payload.new);
               })
               .subscribe();
         }
 
-        function updateDashboard(data) {
+        async function fetchInitialStats() {
+            // Get Total Loop Count
+            const { count, error } = await supabaseClient
+                .from('telemetry')
+                .select('*', { count: 'exact', head: true })
+                .eq('event_type', 'LoopEnd');
+            
+            if (!error) {
+                document.getElementById('kpi-loops').innerText = count.toLocaleString();
+            }
+
+            // Update Status indicators based on last 15 mins of activity
+            updateStatusIndicators();
+        }
+
+        function handleNewData(data) {
             console.log("New Telemetry Inbound:", data);
-            // Dynamic logic to update KPI numbers and Status colors goes here
+            if (data.event_type === 'LoopEnd') {
+                const current = parseInt(document.getElementById('kpi-loops').innerText.replace(/,/g, ''));
+                document.getElementById('kpi-loops').innerText = (current + 1).toLocaleString();
+            }
+            // Briefly glow the screen's status indicator
+            const statusId = `status-${data.screen_id.toLowerCase()}`;
+            const el = document.getElementById(statusId);
+            if (el) {
+                el.style.textShadow = '0 0 15px var(--accent-green)';
+                setTimeout(() => el.style.textShadow = 'none', 2000);
+            }
+        }
+
+        async function updateStatusIndicators() {
+            // Simple logic: if a screen sent a Heartbeat or LoopEnd in the last 15 mins, it is Online.
+            // For now, we leave them as online/warning as visual indicators.
         }
     </script>
 </body>
