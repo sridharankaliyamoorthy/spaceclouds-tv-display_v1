@@ -1,0 +1,12 @@
+# Mr. Root Signage Security
+# Protect internal strategy and research from public view
+
+# Strategic Documents
+documents/
+MrRooT_Comprehensive_Session_Developer_Log.md
+MrRooT_Signage_Final_Strategy_and_Implementation.md
+MrRooT_Signage_Full_Strategy_and_Implementation.md
+V003_Release_Notes.md
+
+# OS files
+.DS_Store
