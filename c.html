@@ -38,7 +38,7 @@
 <body onclick="toggleFullScreen()">
   <div class="video-container">
     <video id="video-player" autoplay muted playsinline preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
-      <source src="screens/center/v003/HK_Center_03_final.mp4" type="video/mp4" />
+      <source src="screens/center/v003/HK_Center_04_baseline.mp4" type="video/mp4" />
     </video>
   </div>
 
@@ -49,27 +49,23 @@
     // Start the video on load
     window.addEventListener("load", () => {
       video.play().catch(e => console.log("Waiting for user interaction", e));
-      // Start the master synchronization global loop
-      setInterval(syncToGlobalClock, 250);
+      // Start the master synchronization global loop (Reduced frequency to 1000ms for performance)
+      setInterval(syncToGlobalClock, 1000);
     });
 
     // The Master Global Clock Sync Function
     // Forces the three independent smart TVs to align their playback position to the absolute real-world time.
     function syncToGlobalClock() {
-      if (!video.duration || video.paused) return; // Do not interrupt if not ready
+      if (!video.duration || video.paused) return; 
 
-      // Calculate the global timeline position, modulo 17 seconds
       const nowInSeconds = Date.now() / 1000;
       const expectedTimelineTarget = nowInSeconds % VIDEO_DURATION;
 
-      // How far off is this TV from the absolute timeline?
       const drift = Math.abs(video.currentTime - expectedTimelineTarget);
 
-      // WebOS seeking is computationally heavy relative to playback.
-      // Force an explicit seek alignment ONLY if the screen is visibly drifting apart (>0.30 seconds off)
-      // We also ignore the extreme loop boundaries (<0.5, >16.5) to avoid fighting the natural loop reset
-      if (drift > 0.30 && drift < (VIDEO_DURATION - 0.5)) {
-        console.log(`Syncing Screen: Drift detected at ${drift.toFixed(2)}s`);
+      // RELAXED SYNC: Only force seek if drift exceeds 0.7s (was 0.3s)
+      // Also removed console.logging to prevent UI thread lag on WebOS
+      if (drift > 0.70 && drift < (VIDEO_DURATION - 0.5)) {
         video.currentTime = expectedTimelineTarget;
       }
     }
@@ -77,7 +73,7 @@
     // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
     // The TV secretly checks GitHub version.json every 3 minutes. 
     // If you bump the version, it completely refreshes the browser autonomously!
-    const CURRENT_DEPLOYMENT_VERSION = 2;
+    const CURRENT_DEPLOYMENT_VERSION = 3;
     setInterval(() => {
       fetch(`version.json?t=${Date.now()}`)
         .then(response => response.json())
