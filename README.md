@@ -39,10 +39,11 @@ This project provides a professional, 3-screen digital signage solution for Spac
 
 | Property | Recommended Value |
 |----------|------------------|
-| **Codec** | HEVC (H.265) or H.264 |
-| **Resolution** | Up to 2048x1152 (for HEVC) or 1920x1080 (for H.264) |
-| **Container** | MP4 |
-| **Audio** | AAC |
+| **Codec** | **H.264 (Baseline Profile)** |
+| **Level** | **4.1** (for 1080p) |
+| **Bitrate** | 3 - 5 Mbps |
+| **Flags** | `+faststart` |
+| **Audio** | AAC-LC (2kbps dummy track) |
 
 ### ⚠️ Known Issues
 
