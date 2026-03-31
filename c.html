@@ -35,7 +35,7 @@
 <body onclick="toggleFullScreen()">
   <div class="video-container">
     <video id="video-player" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
-      <source src="screens/center/v003/HK_Center_04_baseline.mp4" type="video/mp4" />
+      <source src="screens/center/v003/HK_Center_04_fastdecode.mp4" type="video/mp4" />
     </video>
   </div>
 
@@ -62,7 +62,7 @@
 
     // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
     // The TV secretly checks GitHub version.json every 3 minutes.
-    const CURRENT_DEPLOYMENT_VERSION = 6;
+    const CURRENT_DEPLOYMENT_VERSION = 7;
     setInterval(() => {
       fetch(`version.json?t=${Date.now()}`)
         .then(response => response.json())
