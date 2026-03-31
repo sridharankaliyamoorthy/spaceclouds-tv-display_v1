@@ -62,7 +62,7 @@
 
     // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
     // The TV secretly checks GitHub version.json every 3 minutes.
-    const CURRENT_DEPLOYMENT_VERSION = 7;
+    const CURRENT_DEPLOYMENT_VERSION = 8;
     setInterval(() => {
       fetch(`version.json?t=${Date.now()}`)
         .then(response => response.json())
