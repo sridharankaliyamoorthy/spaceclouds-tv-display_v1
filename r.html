@@ -42,26 +42,37 @@
       const video = document.getElementById("video-player");
       const VIDEO_DURATION = 17.000; // Exact length of our perfectly synced video
 
+      let isSeeking = false;
+      video.addEventListener('seeking', () => { isSeeking = true; });
+      video.addEventListener('seeked', () => { isSeeking = false; });
+
       // Start the video on load
       window.addEventListener("load", () => {
+        // Start video mapped to absolute epoch grid to prevent jump lag
+        const nowInSeconds = Date.now() / 1000;
+        video.currentTime = nowInSeconds % VIDEO_DURATION;
         video.play().catch(e => console.log("Waiting for user interaction", e));
-        // Start the master synchronization global loop (Reduced frequency to 1000ms for performance)
-        setInterval(syncToGlobalClock, 1000);
+        // Start the master synchronization global loop (Reduced frequency to 2000ms for performance)
+        setInterval(syncToGlobalClock, 2000);
       });
 
       // The Master Global Clock Sync Function
       // Forces the three independent smart TVs to align their playback position to the absolute real-world time.
       function syncToGlobalClock() {
-        if (!video.duration || video.paused) return; 
+        if (!video.duration || video.paused || isSeeking) return; 
 
         const nowInSeconds = Date.now() / 1000;
         const expectedTimelineTarget = nowInSeconds % VIDEO_DURATION;
 
-        const drift = Math.abs(video.currentTime - expectedTimelineTarget);
+        let drift = Math.abs(video.currentTime - expectedTimelineTarget);
 
-        // RELAXED SYNC: Only force seek if drift exceeds 0.7s (was 0.3s)
-        // Also removed console.logging to prevent UI thread lag on WebOS
-        if (drift > 0.70 && drift < (VIDEO_DURATION - 0.5)) {
+        // Accommodate safe wrap-around difference
+        if (drift > (VIDEO_DURATION / 2)) {
+          drift = VIDEO_DURATION - drift;
+        }
+
+        // RELAXED SYNC: Only force seek if drift exceeds 2.5s to prevent WebOS stutter looping
+        if (drift > 2.5) {
           video.currentTime = expectedTimelineTarget;
         }
       }
@@ -94,7 +105,7 @@
       // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
       // The TV secretly checks GitHub version.json every 3 minutes. 
       // If you bump the version, it completely refreshes the browser autonomously!
-      const CURRENT_DEPLOYMENT_VERSION = 3;
+      const CURRENT_DEPLOYMENT_VERSION = 4;
       setInterval(() => {
         fetch(`version.json?t=${Date.now()}`)
           .then(response => response.json())
