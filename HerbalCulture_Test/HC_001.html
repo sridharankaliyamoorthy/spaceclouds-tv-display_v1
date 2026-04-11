@@ -24,6 +24,32 @@
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
     }
+
+    #qr-overlay {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      width: 200px;
+      height: 200px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      z-index: 10;
+      animation: qrCycle 33s infinite;
+    }
+
+    #qr-overlay img {
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes qrCycle {
+      0%   { opacity: 1; }
+      75%  { opacity: 1; }
+      80%  { opacity: 0; }
+      95%  { opacity: 0; }
+      100% { opacity: 1; }
+    }
   </style>
 </head>
 
@@ -34,6 +60,9 @@
       <source src="Assets/hf_20260411_211038_f1f868aa-dc28-4558-886f-2ee54572a4c9_baseline.mp4?v=1" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
+    <div id="qr-overlay">
+      <img src="Assets/hc_qr.png" alt="Scan for HerbalCulture" />
+    </div>
   </div>
 
   <script>
