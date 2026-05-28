@@ -33,7 +33,7 @@
 
 <body onclick="toggleFullScreen()">
   <div class="screen-container">
-    <img class="screen-image" src="screens/Logo%20Gastro.PNG" alt="Gastro screen" />
+    <img class="screen-image" src="screens/center/brand_logo.png" alt="Gastro screen" />
   </div>
 
   <script>
@@ -51,7 +51,7 @@
 
     // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
     // The TV secretly checks GitHub version.json every 3 minutes.
-    const CURRENT_DEPLOYMENT_VERSION = 10;
+    const CURRENT_DEPLOYMENT_VERSION = 11;
     setInterval(() => {
       fetch(`version.json?t=${Date.now()}`)
         .then(response => response.json())
