@@ -15,40 +15,29 @@
       overflow: hidden;
     }
 
-    .video-container {
+    .screen-container {
       position: relative;
       width: 100vw;
       height: 100vh;
       background: #000;
     }
 
-    video {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .screen-image {
+      display: block;
       width: 100%;
       height: 100%;
+      object-fit: contain;
     }
   </style>
 </head>
 
 <body onclick="toggleFullScreen()">
-  <div class="video-container">
-    <video id="video-player" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" x-webkit-airplay="allow">
-      <source src="screens/left/V003/HK_Rt_04_baseline.mp4" type="video/mp4" />
-    </video>
+  <div class="screen-container">
+    <img class="screen-image" src="screens/center/brand_logo.png" alt="Gastro screen" />
   </div>
 
   <script>
-    const video = document.getElementById("video-player");
-    const VIDEO_DURATION = 17.000; // Exact length of our perfectly synced video
-
-    // Start the video perfectly synced to the Epoch Grid ONCE
     window.addEventListener("load", () => {
-      const nowInSeconds = Date.now() / 1000;
-      video.currentTime = nowInSeconds % VIDEO_DURATION;
-      video.play().catch(e => console.log("Waiting for user interaction", e));
-      
       // Hourly Watchdog Sync: Softly reloads the entire page exactly at the top of the hour
       // Ensures long-term synchronization across all 3 screens without causing mid-video lag
       setInterval(() => {
@@ -62,7 +51,7 @@
 
     // --- ZERO-TOUCH REMOTE UPDATE POLLER ---
     // The TV secretly checks GitHub version.json every 3 minutes.
-    const CURRENT_DEPLOYMENT_VERSION = 8;
+    const CURRENT_DEPLOYMENT_VERSION = 11;
     setInterval(() => {
       fetch(`version.json?t=${Date.now()}`)
         .then(response => response.json())
@@ -102,11 +91,6 @@
     // Initial Uptime Pulse & 10-Minute Heartbeat
     window.addEventListener('load', () => sendTelemetry('InitialBoot'));
     setInterval(() => sendTelemetry('Heartbeat'), 600000);
-
-    // Log successful loop to telemetry based on the mathematical loop duration
-    setInterval(() => {
-      sendTelemetry('LoopEnd');
-    }, VIDEO_DURATION * 1000);
 
     function toggleFullScreen() {
       if (!document.fullscreenElement) {
